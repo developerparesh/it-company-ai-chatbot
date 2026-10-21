@@ -1,7 +1,7 @@
 {
-  "name": "it-company-ai-chatbot",
+  "name": "inaxdeveloper-ai-chatbot",
   "version": "1.0.0",
-  "description": "Lightweight, embeddable AI live chat widget for IT companies to handle client queries and capture leads.",
+  "description": "Lightweight, embeddable AI live chat widget for IT companies by INAxDeveloper (Developer Paresh).",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,12 +9,14 @@
   "keywords": [
     "chatbot",
     "ai",
+    "inaxdeveloper",
+    "developer-paresh",
     "it-company",
     "livechat",
     "lead-generation",
     "lightweight"
   ],
-  "author": "Antigravity",
+  "author": "Developer Paresh (INAxDeveloper)",
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",

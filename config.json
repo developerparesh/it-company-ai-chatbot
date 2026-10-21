@@ -1,16 +1,17 @@
 {
   "company": {
-    "name": "NovaByte Infotech",
-    "tagline": "Enterprise Software & Cloud Engineering",
-    "supportEmail": "contact@novabyteinfotech.com",
+    "name": "INAxDeveloper",
+    "tagline": "Enterprise Software & Cloud Engineering | Developed by Developer Paresh",
+    "developer": "Developer Paresh",
+    "supportEmail": "pareshchauhan39500@gmail.com",
     "phone": "+91 98765 43210",
     "whatsappNumber": "919876543210",
-    "officeAddress": "Tech Hub, 4th Floor, Silicon Valley Road",
-    "workingHours": "Mon - Fri, 9:00 AM - 7:00 PM IST",
+    "officeAddress": "Surat, Gujarat, India",
+    "workingHours": "Mon - Sat, 9:00 AM - 8:00 PM IST",
     "primaryColor": "#2563eb",
     "secondaryColor": "#1e40af",
-    "botName": "Nova AI",
-    "welcomeMessage": "Hello! 👋 Welcome to **NovaByte Infotech**.\n\nI'm **Nova**, your AI technical & careers consultant. How can I help you today? You can explore our IT services, get instant cost estimates, book an online consultation, or apply for our open job vacancies!"
+    "botName": "INAx AI",
+    "welcomeMessage": "Hello! 👋 Welcome to **INAxDeveloper** (Developed by Developer Paresh).\n\nI'm **INAx AI**, your technical & careers consultant. How can I help you today? You can explore our IT services, get instant cost estimates, book an online video meeting, or apply for our open job vacancies!"
   },
   "booking": {
     "enabled": true,
@@ -33,12 +34,12 @@
     ]
   },
   "quickActions": [
-    { "id": "qa_services", "label": "💼 IT Services", "query": "What services does your IT company offer?", "action": "chat" },
+    { "id": "qa_services", "label": "💼 IT Services", "query": "What services does INAxDeveloper offer?", "action": "chat" },
     { "id": "qa_pricing", "label": "💰 Cost Estimate", "query": "How much does it cost to build a web or mobile app?", "action": "chat" },
     { "id": "qa_tech", "label": "⚡ Tech Stack", "query": "What technologies and frameworks do you use?", "action": "chat" },
-    { "id": "qa_hire", "label": "👨‍💻 Hire Developers", "query": "How can I hire dedicated developers?", "action": "chat" },
-    { "id": "qa_jobs", "label": "🎯 Open Jobs & Careers", "query": "What job openings and vacancies are currently available?", "action": "show_jobs" },
-    { "id": "qa_book", "label": "📅 Book Online Meeting", "query": "I want to schedule an online video consultation", "action": "open_booking" }
+    { "id": "qa_hire", "label": "👨‍💻 Hire Developers", "query": "How can I hire dedicated developers from Developer Paresh?", "action": "chat" },
+    { "id": "qa_jobs", "label": "🎯 Open Jobs & Careers", "query": "What job openings and vacancies are currently available at INAxDeveloper?", "action": "show_jobs" },
+    { "id": "qa_book", "label": "📅 Book Online Meeting", "query": "I want to schedule an online video consultation with Developer Paresh", "action": "open_booking" }
   ],
   "services": [
     {
@@ -80,24 +81,29 @@
   ],
   "faq": [
     {
+      "id": "faq_about",
+      "keywords": ["who are you", "developer paresh", "inaxdeveloper", "about you", "founder", "owner"],
+      "answer": "🚀 **INAxDeveloper** is a full-cycle software and IT engineering brand founded & developed by **Developer Paresh**.\n\nWe specialize in high-performance web applications, Flutter mobile apps, AI solutions, and dedicated software development for clients worldwide."
+    },
+    {
       "id": "faq_jobs",
       "keywords": ["job", "jobs", "career", "careers", "hiring", "vacancy", "vacancies", "opening", "openings", "apply", "intern", "developer job", "work with you", "resume"],
-      "answer": "We are actively hiring talented engineers! 🚀\n\nClick **'🎯 Open Jobs & Careers'** or the **'💼 Careers'** button above to browse all current openings and submit your application with your resume/LinkedIn link in 30 seconds."
+      "answer": "We are actively hiring talented engineers at INAxDeveloper! 🚀\n\nClick **'🎯 Open Jobs & Careers'** or the **'🎯 Careers'** button above to browse all current openings and submit your application with your resume/LinkedIn link in 30 seconds."
     },
     {
       "id": "faq_book",
       "keywords": ["book", "booking", "schedule", "meeting", "consultation", "call", "appointment", "demo", "google meet", "zoom"],
-      "answer": "You can schedule a 1-on-1 online video consultation with our Solutions Architect!\n\nClick **'📅 Book Meeting'** at the top bar to choose your preferred date, time slot, and discussion topic."
+      "answer": "You can schedule a 1-on-1 online video consultation with Developer Paresh and the INAxDeveloper engineering team!\n\nClick **'📅 Book Meeting'** at the top bar to choose your preferred date, time slot, and discussion topic."
     },
     {
       "id": "faq_cost",
       "keywords": ["cost", "price", "pricing", "budget", "rate", "quote", "charge", "fees"],
-      "answer": "Our pricing depends on the project scope, complexity, and timeline:\n• **Starter / MVP Web App**: Starts from $1,500 – $4,000 (2–4 weeks)\n• **Cross-Platform Mobile App (Flutter/React Native)**: Starts from $2,500 – $6,000 (4–8 weeks)\n• **Full-Scale SaaS / Enterprise Platform**: $6,000 – $15,000+\n• **Dedicated Developer**: $18 – $35 / hour or flat monthly contract ($2,200 – $4,500/mo).\n\nWould you like a customized proposal and detailed cost breakdown? Click **'📋 Request Quote'** or **'📅 Book Meeting'** above!"
+      "answer": "Our pricing at INAxDeveloper depends on project scope, complexity, and timeline:\n• **Starter / MVP Web App**: Starts from $1,500 – $4,000 (2–4 weeks)\n• **Cross-Platform Mobile App (Flutter/React Native)**: Starts from $2,500 – $6,000 (4–8 weeks)\n• **Full-Scale SaaS / Enterprise Platform**: $6,000 – $15,000+\n• **Dedicated Developer**: $18 – $35 / hour or flat monthly contract ($2,200 – $4,500/mo).\n\nWould you like a customized proposal and detailed cost breakdown? Click **'📋 Request Quote'** or **'📅 Book Meeting'** above!"
     },
     {
       "id": "faq_services",
       "keywords": ["service", "what do you do", "offer", "provide", "solutions", "capability"],
-      "answer": "We specialize in end-to-end IT & Software Engineering solutions:\n1. **Custom Web & SaaS Development** (React, Next.js, Node, Python)\n2. **Mobile App Development** (iOS & Android via Flutter / React Native)\n3. **AI & Machine Learning Integration** (Chatbots, LLMs, Automation)\n4. **Cloud & DevOps Engineering** (AWS, GCP, Azure, Docker, Kubernetes)\n5. **Dedicated Developer Hiring** (Staff augmentation in your time zone)\n6. **UI/UX Product Design & Prototyping**\n\nWhich service are you looking for today?"
+      "answer": "At **INAxDeveloper**, we specialize in:\n1. **Custom Web & SaaS Development** (React, Next.js, Node, Python)\n2. **Mobile App Development** (iOS & Android via Flutter / React Native)\n3. **AI & Machine Learning Integration** (Chatbots, LLMs, Automation)\n4. **Cloud & DevOps Engineering** (AWS, GCP, Azure, Docker, Kubernetes)\n5. **Dedicated Developer Hiring** (Staff augmentation in your time zone)\n6. **UI/UX Product Design & Prototyping**\n\nWhich service are you looking for today?"
     },
     {
       "id": "faq_tech",
@@ -107,7 +113,7 @@
     {
       "id": "faq_hire",
       "keywords": ["hire", "developer", "contract", "staff", "resource", "remote dev", "talent", "team augmentation"],
-      "answer": "Yes! You can hire dedicated full-time or part-time developers from us:\n• **Experience**: 3 to 8+ years\n• **Skills**: React, Node, Python, Flutter, DevOps, QA\n• **Trial**: 1-week risk-free trial\n• **Overlap**: We support US, UK, European, Middle East, and APAC time zones.\n\nTell us what technology and senior level you need, and we can share developer resumes within 24 hours!"
+      "answer": "Yes! You can hire dedicated full-time or part-time developers from INAxDeveloper:\n• **Experience**: 3 to 8+ years\n• **Skills**: React, Node, Python, Flutter, DevOps, QA\n• **Trial**: 1-week risk-free trial\n• **Overlap**: We support US, UK, European, Middle East, and APAC time zones.\n\nTell us what technology and senior level you need, and we can share developer resumes within 24 hours!"
     },
     {
       "id": "faq_timeline",
@@ -115,17 +121,12 @@
       "answer": "Our typical delivery timelines are:\n• **Landing Page / Business Website**: 5 – 10 days\n• **MVP / Prototype**: 3 – 5 weeks\n• **Full-featured Custom Web/Mobile App**: 2 – 3 months\n• **Enterprise Solutions**: 3 – 6 months with bi-weekly sprint demos."
     },
     {
-      "id": "faq_nda",
-      "keywords": ["nda", "security", "ip", "intellectual property", "confidential", "contract"],
-      "answer": "We strictly protect your privacy and intellectual property:\n• We sign a standard **Non-Disclosure Agreement (NDA)** before discussing project specifics.\n• You retain **100% full ownership** of the source code, design assets, and database upon completion.\n• We adhere to OWASP standards, data encryption, and GDPR/HIPAA compliance where required."
-    },
-    {
       "id": "faq_contact",
       "keywords": ["contact", "call", "email", "phone", "whatsapp", "talk to human", "agent", "support", "sales"],
-      "answer": "You can connect with our solutions consulting team directly:\n• 📧 **Email**: contact@novabyteinfotech.com\n• 📞 **Phone**: +91 98765 43210\n• 💬 **WhatsApp**: Instant response available\n• 📍 **Office**: Tech Hub, 4th Floor, Silicon Valley Road\n\nWould you like me to have our senior technical architect call you? Click **'📅 Book Meeting'** to pick a convenient slot!"
+      "answer": "You can connect with Developer Paresh and the INAxDeveloper team directly:\n• 📧 **Email**: pareshchauhan39500@gmail.com\n• 📞 **Phone**: +91 98765 43210\n• 💬 **WhatsApp**: Instant response available\n• 📍 **Location**: Surat, Gujarat, India\n\nClick **'📅 Book Meeting'** to pick a convenient slot for a video consultation!"
     }
   ],
   "geminiConfig": {
-    "systemInstruction": "You are Nova, an expert AI Technical & Careers Consultant for 'NovaByte Infotech', a modern IT services agency. Answer queries about IT services (Web, Mobile, AI, Cloud), project estimates, tech stacks, developer hiring, and also provide information on open job openings and career opportunities at NovaByte. When candidates ask about jobs, encourage them to submit an application. For prospective clients, guide them to request a quote or book an online meeting. Keep answers concise, professional, warm, and structured with bullet points."
+    "systemInstruction": "You are INAx AI, the official AI Technical & Careers Consultant for 'INAxDeveloper', founded and developed by Developer Paresh. Answer queries about IT services (Web, Mobile, AI, Cloud), project estimates, tech stacks, developer hiring, and open job openings. When candidates ask about jobs, encourage them to submit an application. For prospective clients, guide them to request a quote or book an online meeting with Developer Paresh."
   }
 }

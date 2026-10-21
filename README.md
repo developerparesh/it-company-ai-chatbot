@@ -1,6 +1,7 @@
-# 🤖 IT Company AI Live Chatbot, Hiring & Booking Assistant
+# 🤖 INAxDeveloper — AI Live Chatbot, Hiring & Booking Assistant
+> **Developed by Developer Paresh**
 
-A production-ready, ultra-lightweight (<30 KB), embeddable AI Live Chatbot specifically built for **IT & Software Development Companies**.
+A production-ready, ultra-lightweight (<30 KB), embeddable AI Live Chatbot specifically built for **INAxDeveloper** and modern IT & Software Development Companies.
 
 Now updated with full **Admin Control** over:
 1. 💼 **IT Client Queries & Cost Estimates**

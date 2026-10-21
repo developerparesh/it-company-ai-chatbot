@@ -13,16 +13,17 @@
 
   let activeConfig = {
     apiEndpoint: userConfig.apiEndpoint || '',
-    companyName: userConfig.companyName || 'NovaByte Infotech',
-    botName: userConfig.botName || 'Nova AI',
+    companyName: userConfig.companyName || 'INAxDeveloper',
+    developer: userConfig.developer || 'Developer Paresh',
+    botName: userConfig.botName || 'INAx AI',
     primaryColor: userConfig.primaryColor || '#2563eb',
     secondaryColor: userConfig.secondaryColor || '#1d4ed8',
     whatsappNumber: userConfig.whatsappNumber || '919876543210',
-    supportEmail: userConfig.supportEmail || 'contact@novabyteinfotech.com',
+    supportEmail: userConfig.supportEmail || 'pareshchauhan39500@gmail.com',
     phone: userConfig.phone || '+91 98765 43210',
-    welcomeMessage: userConfig.welcomeMessage || "Hello! 👋 Welcome to **NovaByte Infotech**.\n\nI'm **Nova**, your AI technical & careers consultant. How can I help you today? You can explore our IT services, get instant cost estimates, book an online video meeting, or apply for our open job vacancies!",
+    welcomeMessage: userConfig.welcomeMessage || "Hello! 👋 Welcome to **INAxDeveloper** (Developed by Developer Paresh).\n\nI'm **INAx AI**, your technical & careers consultant. How can I help you today? You can explore our IT services, get instant cost estimates, book an online video meeting, or apply for our open job vacancies!",
     quickPrompts: [
-      { label: "💼 IT Services", query: "What services does your IT company offer?" },
+      { label: "💼 IT Services", query: "What services does INAxDeveloper offer?" },
       { label: "💰 Cost Estimate", query: "How much does it cost to build a custom web or mobile app?" },
       { label: "⚡ Tech Stack", query: "What technologies and frameworks do you use?" },
       { label: "🎯 Open Jobs & Careers", action: "open_jobs" },
