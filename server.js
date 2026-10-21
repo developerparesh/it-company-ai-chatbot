@@ -22,6 +22,26 @@ const LEADS_PATH = path.join(__dirname, 'leads.json');
 const JOBS_PATH = path.join(__dirname, 'jobs.json');
 const APPLICATIONS_PATH = path.join(__dirname, 'applications.json');
 const MEETINGS_PATH = path.join(__dirname, 'meetings.json');
+const CONVERSATIONS_PATH = path.join(__dirname, 'conversations.json');
+
+// Helper to parse human device name from User-Agent
+function parseDeviceInfo(userAgent) {
+  if (!userAgent) return 'Web Browser';
+  let os = 'Desktop';
+  if (/android/i.test(userAgent)) os = 'Android Mobile';
+  else if (/iphone|ipad|ipod/i.test(userAgent)) os = 'iOS / iPhone';
+  else if (/windows/i.test(userAgent)) os = 'Windows PC';
+  else if (/macintosh|mac os x/i.test(userAgent)) os = 'Mac OS';
+  else if (/linux/i.test(userAgent)) os = 'Linux';
+
+  let browser = 'Browser';
+  if (/edg/i.test(userAgent)) browser = 'Edge';
+  else if (/chrome/i.test(userAgent)) browser = 'Chrome';
+  else if (/safari/i.test(userAgent)) browser = 'Safari';
+  else if (/firefox/i.test(userAgent)) browser = 'Firefox';
+
+  return `${os} (${browser})`;
+}
 
 // Generic JSON helpers
 function readJSON(filePath, fallback = []) {
@@ -62,7 +82,7 @@ app.post('/api/upload', (req, res) => {
     fs.writeFileSync(destPath, buffer);
 
     const fileUrl = `/uploads/${safeName}`;
-    console.log(`[FILE UPLOADED] 📄 ${fileName} saved to ${fileUrl} (${(buffer.length / 1024).toFixed(1)} KB)`);
+    console.log(`[FILE UPLOADED] 📄 ${fileName} (${(buffer.length / 1024).toFixed(1)} KB) -> ${fileUrl}`);
 
     res.json({
       success: true,
@@ -71,7 +91,6 @@ app.post('/api/upload', (req, res) => {
       fileSize: (buffer.length / 1024).toFixed(1) + ' KB'
     });
   } catch (err) {
-    console.error('File upload error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -92,18 +111,19 @@ app.post('/api/config', (req, res) => {
   }
 });
 
-// ==================== LEADS APIS ====================
+// ==================== LEADS APIS (WITH SENDER INFO) ====================
 app.get('/api/leads', (req, res) => {
   const leads = readJSON(LEADS_PATH, []);
   res.json({ success: true, leads });
 });
 
 app.post('/api/leads', (req, res) => {
-  const { name, email, phone, company, service, budget, message, attachment } = req.body;
+  const { name, email, phone, company, service, budget, message, attachment, userAgent } = req.body;
   if (!name || (!email && !phone)) {
     return res.status(400).json({ success: false, error: 'Name and either Email or Phone are required.' });
   }
 
+  const device = parseDeviceInfo(userAgent || req.headers['user-agent']);
   const leads = readJSON(LEADS_PATH, []);
   const newLead = {
     id: 'lead_' + Date.now(),
@@ -115,13 +135,14 @@ app.post('/api/leads', (req, res) => {
     budget: budget || 'Not specified',
     message: message ? message.trim() : '',
     attachment: attachment || null,
+    device: device,
     createdAt: new Date().toISOString()
   };
 
   leads.unshift(newLead);
   writeJSON(LEADS_PATH, leads);
 
-  console.log(`[NEW CLIENT LEAD] 🚀 ${newLead.name} (${newLead.email || newLead.phone}) - Service: ${newLead.service}${newLead.attachment ? ` [Attached: ${newLead.attachment.fileName}]` : ''}`);
+  console.log(`[NEW CLIENT LEAD] 👤 Sent By: ${newLead.name} (${newLead.email} | ${newLead.phone}) on ${newLead.device}`);
 
   res.json({
     success: true,
@@ -216,11 +237,12 @@ app.get('/api/applications', (req, res) => {
 });
 
 app.post('/api/apply', (req, res) => {
-  const { name, email, phone, jobTitle, experience, portfolio, resumeLink, resumeFile, coverNote } = req.body;
+  const { name, email, phone, jobTitle, experience, portfolio, resumeLink, resumeFile, coverNote, userAgent } = req.body;
   if (!name || (!email && !phone)) {
     return res.status(400).json({ success: false, error: 'Name and either Email or Phone are required.' });
   }
 
+  const device = parseDeviceInfo(userAgent || req.headers['user-agent']);
   const applications = readJSON(APPLICATIONS_PATH, []);
   const newApp = {
     id: 'app_' + Date.now(),
@@ -233,6 +255,7 @@ app.post('/api/apply', (req, res) => {
     resumeLink: resumeLink ? resumeLink.trim() : '',
     resumeFile: resumeFile || null,
     coverNote: coverNote ? coverNote.trim() : '',
+    device: device,
     status: 'New',
     createdAt: new Date().toISOString()
   };
@@ -240,7 +263,7 @@ app.post('/api/apply', (req, res) => {
   applications.unshift(newApp);
   writeJSON(APPLICATIONS_PATH, applications);
 
-  console.log(`[NEW JOB APPLICATION] 🎯 ${newApp.name} applied for: ${newApp.jobTitle}${newApp.resumeFile ? ` [Resume: ${newApp.resumeFile.fileName}]` : ''}`);
+  console.log(`[JOB APPLICATION] 🎯 Sent By: ${newApp.name} (${newApp.email} | ${newApp.phone}) for "${newApp.jobTitle}"`);
 
   res.json({
     success: true,
@@ -276,18 +299,19 @@ app.delete('/api/applications/:id', (req, res) => {
   }
 });
 
-// ==================== ONLINE BOOKING & MEETINGS APIS ====================
+// ==================== ONLINE BOOKINGS APIS ====================
 app.get('/api/meetings', (req, res) => {
   const meetings = readJSON(MEETINGS_PATH, []);
   res.json({ success: true, meetings });
 });
 
 app.post('/api/meetings', (req, res) => {
-  const { name, email, phone, company, meetingType, preferredDate, preferredTime, notes } = req.body;
+  const { name, email, phone, company, meetingType, preferredDate, preferredTime, notes, userAgent } = req.body;
   if (!name || (!email && !phone)) {
     return res.status(400).json({ success: false, error: 'Name and either Email or Phone are required.' });
   }
 
+  const device = parseDeviceInfo(userAgent || req.headers['user-agent']);
   const meetings = readJSON(MEETINGS_PATH, []);
   const newMeeting = {
     id: 'meet_' + Date.now(),
@@ -299,6 +323,7 @@ app.post('/api/meetings', (req, res) => {
     preferredDate: preferredDate || 'As soon as possible',
     preferredTime: preferredTime || 'Flexible',
     notes: notes ? notes.trim() : '',
+    device: device,
     status: 'Confirmed',
     createdAt: new Date().toISOString()
   };
@@ -306,7 +331,7 @@ app.post('/api/meetings', (req, res) => {
   meetings.unshift(newMeeting);
   writeJSON(MEETINGS_PATH, meetings);
 
-  console.log(`[ONLINE MEETING BOOKED] 📅 ${newMeeting.name} (${newMeeting.email}) for ${newMeeting.meetingType}`);
+  console.log(`[ONLINE MEETING] 📅 Sent By: ${newMeeting.name} (${newMeeting.email} | ${newMeeting.phone}) for ${newMeeting.meetingType}`);
 
   res.json({
     success: true,
@@ -328,16 +353,35 @@ app.delete('/api/meetings/:id', (req, res) => {
   }
 });
 
-// ==================== CHAT APIS (WITH DOCUMENT SUPPORT) ====================
+// ==================== LIVE CHAT CONVERSATIONS & SENDER LOGS ====================
+app.get('/api/conversations', (req, res) => {
+  const conversations = readJSON(CONVERSATIONS_PATH, []);
+  res.json({ success: true, conversations });
+});
+
+app.delete('/api/conversations/:id', (req, res) => {
+  const { id } = req.params;
+  let conversations = readJSON(CONVERSATIONS_PATH, []);
+  const initialLen = conversations.length;
+  conversations = conversations.filter(c => c.id !== id);
+  if (conversations.length !== initialLen) {
+    writeJSON(CONVERSATIONS_PATH, conversations);
+    res.json({ success: true, message: 'Conversation deleted' });
+  } else {
+    res.status(404).json({ success: false, error: 'Conversation not found' });
+  }
+});
+
+// Helper: Rule-based fallback query resolver
 function resolveRuleBasedAnswer(userMsg, config, attachment) {
   const clean = userMsg ? userMsg.toLowerCase().trim() : '';
 
   if (attachment) {
-    return `Thank you for sending the document **${attachment.fileName}** (${attachment.fileSize || 'Uploaded'})! 📄\n\nI have attached this document to your chat session. Our engineering and recruitment team at **${config.company.name}** will review it carefully.\n\nCould you also share your **Name and Email/Phone** or click **'📋 Request Quote'** or **'🎯 Apply for Jobs'** so we can associate your document with your profile?`;
+    return `Thank you for sending the document **${attachment.fileName}** (${attachment.fileSize || 'Uploaded'})! 📄\n\nI have received your document. Our engineering team at **${config.company.name}** will review it carefully.\n\nCould you also share your **Name and Email/Phone** or click **'📋 Request Quote'** so we can contact you?`;
   }
 
   if (/^(hi|hello|hey|namaste|good morning|good afternoon|good evening|greetings)\b/i.test(clean)) {
-    return `Hello! 👋 Welcome to **${config.company.name}** (Developed by **Developer Paresh**).\n\nHow can I help you today?\n• 💼 Browse **IT Services**\n• 💰 Get an instant **Cost Estimate**\n• 📅 **Book an Online Meeting** with Developer Paresh\n• 🎯 Browse **Open Jobs & Apply**\n• 📎 You can also **attach resumes, RFPs, or project docs** using the paperclip button!`;
+    return `Hello! 👋 Welcome to **${config.company.name}** (Developed by **Developer Paresh**).\n\nHow can I help you today?\n• 💼 Browse **IT Services**\n• 💰 Get an instant **Cost Estimate**\n• 📅 **Book an Online Meeting** with Developer Paresh\n• 🎯 Browse **Open Jobs & Apply**\n• 📎 You can attach resumes or project specs via the paperclip button!`;
   }
 
   if (/\b(job|jobs|hiring|career|careers|vacancy|vacancies|apply|work with you|resume|intern|opening|openings)\b/i.test(clean)) {
@@ -345,9 +389,9 @@ function resolveRuleBasedAnswer(userMsg, config, attachment) {
     const activeJobs = jobs.filter(j => j.status === 'Active');
     if (activeJobs.length > 0) {
       let jobList = activeJobs.map((j, i) => `${i+1}. **${j.title}** (${j.type})\n   • Experience: ${j.experience} | Dept: ${j.department}`).join('\n\n');
-      return `🚀 **We are currently hiring for ${activeJobs.length} open position(s) at INAxDeveloper:**\n\n${jobList}\n\n👉 Click **'🎯 Apply for Jobs'** in the top bar to submit your profile and **upload your resume (.PDF/.DOCX)**!`;
+      return `🚀 **We are currently hiring for ${activeJobs.length} open position(s) at INAxDeveloper:**\n\n${jobList}\n\n👉 Click **'🎯 Careers & Jobs'** in the top bar to apply and **upload your resume (.PDF/.DOCX)**!`;
     } else {
-      return `We are always looking for great engineers, designers, and project managers! Click **'🎯 Apply for Jobs'** to upload your resume (.PDF/.DOCX) directly.`;
+      return `We are always looking for great engineers, designers, and project managers! Click **'🎯 Careers & Jobs'** to upload your resume (.PDF/.DOCX) directly.`;
     }
   }
 
@@ -373,17 +417,19 @@ function resolveRuleBasedAnswer(userMsg, config, attachment) {
     }
   }
 
-  return `Thank you for contacting **${config.company.name}**! We provide custom software engineering, mobile apps, AI solutions, and dedicated IT staffing.\n\n• **'📋 Request Quote'** to get an estimate & attach project docs\n• **'📅 Book Meeting'** to schedule an online video consultation\n• **'🎯 Apply for Jobs'** to view career vacancies & upload your resume`;
+  return `Thank you for contacting **${config.company.name}**! We provide custom software engineering, mobile apps, AI solutions, and dedicated IT staffing.\n\n• **'📋 Request Quote'** to get an estimate & attach project docs\n• **'📅 Book Meeting'** to schedule an online video consultation\n• **'🎯 Careers & Jobs'** to view career vacancies & upload your resume`;
 }
 
+// ==================== CHAT API WITH LIVE LOGGING ====================
 app.post('/api/chat', async (req, res) => {
-  const { message, history, apiKey, attachment } = req.body;
+  const { sessionId, senderName, senderContact, message, history, apiKey, attachment, userAgent } = req.body;
   if (!message && !attachment) {
     return res.status(400).json({ error: 'Message or attachment is required' });
   }
 
   const config = readJSON(CONFIG_PATH, {});
   const effectiveApiKey = apiKey || process.env.GEMINI_API_KEY;
+  let botReply = '';
 
   if (effectiveApiKey && !attachment) {
     try {
@@ -422,23 +468,62 @@ app.post('/api/chat', async (req, res) => {
         })
       });
 
-      if (!response.ok) {
-        const fallbackText = resolveRuleBasedAnswer(message, config, attachment);
-        return res.json({ reply: fallbackText, engine: 'rule-engine-fallback' });
-      }
-
-      const data = await response.json();
-      const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (botReply) {
-        return res.json({ reply: botReply, engine: 'gemini-ai' });
+      if (response.ok) {
+        const data = await response.json();
+        botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
       }
     } catch (err) {
-      console.warn('Gemini API exception, falling back to rule engine:', err.message);
+      console.warn('Gemini API exception:', err.message);
     }
   }
 
-  const ruleReply = resolveRuleBasedAnswer(message, config, attachment);
-  return res.json({ reply: ruleReply, engine: 'smart-rules' });
+  if (!botReply) {
+    botReply = resolveRuleBasedAnswer(message, config, attachment);
+  }
+
+  // Record this message in conversations.json so Admin sees who sent it!
+  try {
+    const conversations = readJSON(CONVERSATIONS_PATH, []);
+    const sid = sessionId || 'vis_' + Date.now();
+    let thread = conversations.find(c => c.id === sid);
+
+    if (!thread) {
+      thread = {
+        id: sid,
+        senderName: senderName || 'Website Visitor',
+        senderContact: senderContact || '',
+        device: parseDeviceInfo(userAgent || req.headers['user-agent']),
+        startedAt: new Date().toISOString(),
+        lastActivity: new Date().toISOString(),
+        messages: []
+      };
+      conversations.unshift(thread);
+    } else {
+      thread.lastActivity = new Date().toISOString();
+      if (senderName && thread.senderName === 'Website Visitor') thread.senderName = senderName;
+      if (senderContact && !thread.senderContact) thread.senderContact = senderContact;
+    }
+
+    thread.messages.push({
+      sender: 'user',
+      text: message || '',
+      attachment: attachment ? { fileName: attachment.fileName, fileUrl: attachment.fileUrl, fileSize: attachment.fileSize } : null,
+      timestamp: new Date().toISOString()
+    });
+
+    thread.messages.push({
+      sender: 'bot',
+      text: botReply,
+      timestamp: new Date().toISOString()
+    });
+
+    writeJSON(CONVERSATIONS_PATH, conversations);
+    console.log(`[CHAT LOGGED] 💬 From: ${thread.senderName} (${thread.device}) - Message: "${(message || '').slice(0, 45)}"`);
+  } catch (err) {
+    console.error('Error logging conversation:', err);
+  }
+
+  return res.json({ reply: botReply });
 });
 
 app.listen(PORT, () => {

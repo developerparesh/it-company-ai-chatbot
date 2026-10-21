@@ -83,6 +83,13 @@
     }
   ];
 
+  // Persistent Visitor Session Tracker
+  let visitorSessionId = sessionStorage.getItem('inax_visitor_session_id');
+  if (!visitorSessionId) {
+    visitorSessionId = 'vis_' + Math.floor(1000 + Math.random() * 9000);
+    sessionStorage.setItem('inax_visitor_session_id', visitorSessionId);
+  }
+
   // Helper to convert file to Base64
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -1627,10 +1634,21 @@
     }
 
     try {
+      const storedName = localStorage.getItem('inax_user_name') || '';
+      const storedContact = localStorage.getItem('inax_user_contact') || '';
+
       const res = await fetch(`${activeConfig.apiEndpoint}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, history: chatHistory })
+        body: JSON.stringify({
+          sessionId: visitorSessionId,
+          senderName: storedName ? storedName : `Visitor #${visitorSessionId.slice(-4)}`,
+          senderContact: storedContact,
+          message: msg,
+          attachment: attachment ? { fileName: attachment.fileName, fileUrl: attachment.fileUrl, fileSize: attachment.fileSize } : null,
+          history: chatHistory,
+          userAgent: navigator.userAgent
+        })
       });
 
       if (!res.ok) throw new Error('Backend offline');
@@ -1687,8 +1705,11 @@
       service: shadow.getElementById('leadService').value,
       budget: shadow.getElementById('leadBudget').value,
       message: shadow.getElementById('leadMsg').value,
-      attachment: attachmentObj
+      attachment: attachmentObj,
+      userAgent: navigator.userAgent
     };
+    localStorage.setItem('inax_user_name', leadData.name);
+    localStorage.setItem('inax_user_contact', leadData.email || leadData.phone);
 
     try {
       await fetch(`${activeConfig.apiEndpoint}/api/leads`, {
@@ -1731,8 +1752,11 @@
       meetingType: shadow.getElementById('bookType').value,
       preferredDate: shadow.getElementById('bookDate').value,
       preferredTime: shadow.getElementById('bookTime').value,
-      notes: shadow.getElementById('bookNotes').value
+      notes: shadow.getElementById('bookNotes').value,
+      userAgent: navigator.userAgent
     };
+    localStorage.setItem('inax_user_name', meetData.name);
+    localStorage.setItem('inax_user_contact', meetData.email || meetData.phone);
 
     try {
       await fetch(`${activeConfig.apiEndpoint}/api/meetings`, {
@@ -1790,8 +1814,11 @@
       experience: shadow.getElementById('candidateExp').value,
       portfolio: shadow.getElementById('candidatePortfolio').value,
       resumeFile: resumeFileObj,
-      coverNote: shadow.getElementById('candidateCover').value
+      coverNote: shadow.getElementById('candidateCover').value,
+      userAgent: navigator.userAgent
     };
+    localStorage.setItem('inax_user_name', appData.name);
+    localStorage.setItem('inax_user_contact', appData.email || appData.phone);
 
     try {
       await fetch(`${activeConfig.apiEndpoint}/api/apply`, {

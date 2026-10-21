@@ -51,7 +51,7 @@
       color: #ffffff;
       font-weight: 700;
       font-size: 18px;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       padding: 0 8px;
     }
     .brand-icon {
@@ -76,13 +76,13 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
     .nav-link {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: 8px;
       color: #94a3b8;
       text-decoration: none;
@@ -117,14 +117,14 @@
     /* Main Content */
     .main {
       flex: 1;
-      padding: 30px 40px;
+      padding: 28px 36px;
       overflow-y: auto;
     }
     .top-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
     .top-header h1 {
       font-size: 24px;
@@ -136,9 +136,9 @@
       gap: 10px;
     }
     .btn {
-      padding: 9px 16px;
+      padding: 8px 16px;
       border-radius: 8px;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
@@ -174,24 +174,24 @@
     /* Metrics Grid */
     .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 26px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
     }
     .metric-card {
       background: var(--card-bg);
-      padding: 18px 22px;
+      padding: 16px 20px;
       border-radius: 12px;
       border: 1px solid var(--border);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
     }
     .metric-card span {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--slate);
       font-weight: 600;
     }
     .metric-card h3 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       margin-top: 4px;
       color: var(--dark);
@@ -230,7 +230,7 @@
       border-radius: 8px;
       font-size: 13px;
       outline: none;
-      width: 250px;
+      width: 260px;
     }
 
     table {
@@ -261,6 +261,65 @@
       background: #f8fafc;
     }
 
+    /* Sender Card Component inside table */
+    .sender-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sender-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sender-contact-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+    .sender-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .sender-btn.email-btn {
+      background: #eff6ff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+    .sender-btn.email-btn:hover { background: #dbeafe; }
+    .sender-btn.phone-btn {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .sender-btn.phone-btn:hover { background: #e2e8f0; }
+    .sender-btn.wa-btn {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+    .sender-btn.wa-btn:hover { background: #d1fae5; }
+    .sender-device {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .badge-pill {
       display: inline-block;
       padding: 3px 9px;
@@ -285,6 +344,100 @@
     }
     .btn-delete:hover {
       background: #fecaca;
+    }
+
+    .btn-view-transcript {
+      background: #eff6ff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-view-transcript:hover {
+      background: #dbeafe;
+    }
+
+    /* Modal for Chat Transcript */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      background: #ffffff;
+      width: 580px;
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    .modal-box-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+    }
+    .modal-box-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .modal-box-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #ffffff;
+    }
+    .modal-bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 85%;
+    }
+    .modal-bubble.user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: #ffffff;
+      border-top-right-radius: 2px;
+    }
+    .modal-bubble.bot {
+      align-self: flex-start;
+      background: #f1f5f9;
+      color: #1e293b;
+      border-top-left-radius: 2px;
+    }
+    .modal-time {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-top: 4px;
+      text-align: right;
     }
 
     /* Forms */
@@ -389,6 +542,13 @@
       </li>
     </ul>
 
+    <div class="nav-section-title">Live Conversations</div>
+    <ul class="nav-links">
+      <li class="nav-link" onclick="switchTab('chatsTab', this)">
+        💬 Live Chat Logs <span class="nav-badge" id="badgeChats">0</span>
+      </li>
+    </ul>
+
     <div class="nav-section-title">Hiring & Careers</div>
     <ul class="nav-links">
       <li class="nav-link" onclick="switchTab('jobsTab', this)">
@@ -430,11 +590,11 @@
     <!-- Top Header -->
     <div class="top-header">
       <div>
-        <h1 id="pageTitle">Client Inquiries & Leads</h1>
-        <p style="color:var(--slate); font-size:13.5px; margin-top:3px;" id="pageSubtitle">Manage client inquiries captured by your AI Live Chatbot.</p>
+        <h1 id="pageTitle">Client Inquiries & Quotes</h1>
+        <p style="color:var(--slate); font-size:13.5px; margin-top:3px;" id="pageSubtitle">Track incoming client inquiries with complete sender contact profiles.</p>
       </div>
       <div class="btn-group" id="headerButtons">
-        <button class="btn btn-outline" onclick="refreshCurrentTab()">🔄 Refresh</button>
+        <button class="btn btn-outline" onclick="loadAllData()">🔄 Refresh</button>
         <button class="btn btn-primary" id="btnExport" onclick="exportDataCSV()">📥 Export to CSV</button>
       </div>
     </div>
@@ -446,15 +606,19 @@
         <h3 id="statTotalLeads">0</h3>
       </div>
       <div class="metric-card">
-        <span>Online Video Meetings</span>
+        <span>Online Meetings</span>
         <h3 id="statMeetings">0</h3>
       </div>
       <div class="metric-card">
-        <span>Active Job Vacancies</span>
+        <span>Chat Sessions</span>
+        <h3 id="statChats">0</h3>
+      </div>
+      <div class="metric-card">
+        <span>Job Openings</span>
         <h3 id="statJobs">0</h3>
       </div>
       <div class="metric-card">
-        <span>Job Applicants</span>
+        <span>Candidate Resumes</span>
         <h3 id="statCandidates">0</h3>
       </div>
     </div>
@@ -463,19 +627,17 @@
     <div id="leadsTab" class="tab-view active">
       <div class="card">
         <div class="card-header">
-          <h2>All Client Inquiries</h2>
-          <input type="text" class="search-input" id="searchLeadsInput" placeholder="Search inquiries..." oninput="filterLeads()" />
+          <h2>Client Inquiries & Quotes</h2>
+          <input type="text" class="search-input" id="searchLeadsInput" placeholder="Search by name, email, service..." oninput="filterLeads()" />
         </div>
         <div style="overflow-x: auto;">
           <table>
             <thead>
               <tr>
-                <th>Date & Time</th>
-                <th>Client Name</th>
-                <th>Contact</th>
-                <th>Service Needed</th>
-                <th>Budget</th>
-                <th>Brief</th>
+                <th>Date & Source</th>
+                <th>Who Sent It (Client Profile)</th>
+                <th>Service & Budget</th>
+                <th>Project Details & Documents</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -484,7 +646,7 @@
         </div>
         <div id="emptyLeadsMessage" class="empty-state" style="display:none;">
           <h4>No client inquiries yet!</h4>
-          <p>Submit a test inquiry in the chatbot widget to see it appear here.</p>
+          <p>Submit a test inquiry in the chatbot widget to see who sent it.</p>
         </div>
       </div>
     </div>
@@ -500,9 +662,8 @@
           <table>
             <thead>
               <tr>
-                <th>Preferred Date & Slot</th>
-                <th>Client Name</th>
-                <th>Contact</th>
+                <th>Date & Time Slot</th>
+                <th>Who Sent It (Booked By)</th>
                 <th>Meeting Topic</th>
                 <th>Discussion Agenda</th>
                 <th>Status</th>
@@ -519,7 +680,36 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 3: JOB OPENINGS (ADMIN POSTING) ==================== -->
+    <!-- ==================== TAB 3: LIVE CHAT LOGS ==================== -->
+    <div id="chatsTab" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <h2>💬 Live Chat Conversations & Visitor Logs</h2>
+          <input type="text" class="search-input" id="searchChatsInput" placeholder="Search chat sessions..." oninput="filterChats()" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Last Active</th>
+                <th>Who Sent It (Visitor Profile)</th>
+                <th>Messages</th>
+                <th>Last Message Snippet</th>
+                <th>Full Transcript</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="chatsTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyChatsMessage" class="empty-state" style="display:none;">
+          <h4>No chat conversations logged yet!</h4>
+          <p>Open <a href="index.html" target="_blank" style="color:var(--primary);">index.html</a> and chat with the bot to see your conversation logged here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: JOB OPENINGS ==================== -->
     <div id="jobsTab" class="tab-view">
       <!-- Create Job Card -->
       <div class="card">
@@ -604,25 +794,22 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 4: JOB APPLICATIONS ==================== -->
+    <!-- ==================== TAB 5: JOB APPLICATIONS ==================== -->
     <div id="applicationsTab" class="tab-view">
       <div class="card">
         <div class="card-header">
-          <h2>Candidates & Resumes Received</h2>
+          <h2>Candidate Resumes & Applications</h2>
           <input type="text" class="search-input" id="searchAppsInput" placeholder="Search candidates..." oninput="filterApplications()" />
         </div>
         <div style="overflow-x: auto;">
           <table>
             <thead>
               <tr>
-                <th>Applied Date</th>
-                <th>Candidate Name</th>
+                <th>Date & Device</th>
+                <th>Who Sent It (Candidate Profile)</th>
                 <th>Position Applied</th>
-                <th>Contact</th>
-                <th>Experience</th>
-                <th>Portfolio / LinkedIn</th>
-                <th>Resume</th>
-                <th>Status</th>
+                <th>Resume & Portfolio</th>
+                <th>Hiring Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -631,17 +818,17 @@
         </div>
         <div id="emptyAppsMessage" class="empty-state" style="display:none;">
           <h4>No candidate applications yet!</h4>
-          <p>When candidates apply via the chatbot's "🎯 Careers & Jobs" button, their applications and resumes will show up here.</p>
+          <p>When candidates apply via the chatbot, their applications and uploaded resumes will show up here.</p>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 5: CUSTOM PROMPTS & FAQS ==================== -->
+    <!-- ==================== TAB 6: CUSTOM PROMPTS & FAQS ==================== -->
     <div id="promptsTab" class="tab-view">
       <!-- Add FAQ -->
       <div class="card">
         <div class="card-header">
-          <h2>💬 Add Custom Chat Question & Answer (What You Want the Bot to Answer)</h2>
+          <h2>💬 Add Custom Chat Question & Answer</h2>
         </div>
         <form id="newFaqForm">
           <div class="form-grid">
@@ -707,7 +894,7 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 6: CONFIG ==================== -->
+    <!-- ==================== TAB 7: CONFIG ==================== -->
     <div id="configTab" class="tab-view">
       <div class="card">
         <div class="card-header">
@@ -755,7 +942,7 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 7: EMBED ==================== -->
+    <!-- ==================== TAB 8: EMBED ==================== -->
     <div id="embedTab" class="tab-view">
       <div class="card" style="padding: 24px;">
         <h2 style="margin-bottom:12px;">How to Embed on Any Website</h2>
@@ -771,11 +958,28 @@
 
   </main>
 
+  <!-- Transcript Modal Popup -->
+  <div class="modal-overlay" id="transcriptModal">
+    <div class="modal-box">
+      <div class="modal-box-header">
+        <div>
+          <h3 id="modalTranscriptTitle">Chat Transcript</h3>
+          <small id="modalTranscriptSubtitle" style="color:var(--slate); font-size:11.5px;"></small>
+        </div>
+        <button onclick="closeTranscriptModal()" style="background:transparent; border:none; font-size:20px; cursor:pointer; color:var(--slate);">&times;</button>
+      </div>
+      <div class="modal-box-body" id="modalTranscriptBody">
+        <!-- Messages rendered here -->
+      </div>
+    </div>
+  </div>
+
   <script>
     let allLeads = [];
     let allMeetings = [];
     let allJobs = [];
     let allApplications = [];
+    let allConversations = [];
     let currentConfig = {};
     let currentActiveTab = 'leadsTab';
 
@@ -787,10 +991,11 @@
       if (el) el.classList.add('active');
 
       const meta = {
-        'leadsTab': { title: 'Client Inquiries & Quotes', subtitle: 'Manage client project requests captured by the live chat.' },
-        'meetingsTab': { title: 'Online Video Consultations', subtitle: 'Clients who booked 1-on-1 Google Meet / Zoom discovery calls.' },
+        'leadsTab': { title: 'Client Inquiries & Quotes', subtitle: 'Track incoming client inquiries with complete sender contact profiles.' },
+        'meetingsTab': { title: 'Online Video Consultations', subtitle: 'Clients who booked 1-on-1 discovery calls with contact details.' },
+        'chatsTab': { title: 'Live Chat Conversations & Logs', subtitle: 'Review full chat transcripts and see who is chatting with INAx AI.' },
         'jobsTab': { title: 'Job Vacancies & Hiring', subtitle: 'Post new engineering openings that appear dynamically in the chatbot.' },
-        'applicationsTab': { title: 'Candidate Resumes & Applications', subtitle: 'Review developer and designer job applications submitted via chat.' },
+        'applicationsTab': { title: 'Candidate Resumes & Applications', subtitle: 'Review developer and designer applications with contact info & resumes.' },
         'promptsTab': { title: 'Custom Prompts & Knowledge FAQs', subtitle: 'Configure exact questions and custom answers the bot should know.' },
         'configTab': { title: 'Company & AI Branding', subtitle: 'Customize company info, colors, and Gemini AI credentials.' },
         'embedTab': { title: 'Widget Embed Code', subtitle: 'Copy and paste into your website in 1 line of code.' }
@@ -829,11 +1034,6 @@
       statusEl.textContent = 'Local Browser Mode';
     }
 
-    // Load All Data
-    async function refreshCurrentTab() {
-      loadAllData();
-    }
-
     async function loadAllData() {
       // 1. Leads
       try {
@@ -853,14 +1053,19 @@
       }
       renderMeetings(allMeetings);
 
-      // 3. Jobs
+      // 3. Conversations (Live Chat Logs)
+      try {
+        const res = await fetch('/api/conversations');
+        allConversations = res.ok ? (await res.json()).conversations : [];
+      } catch (e) {
+        allConversations = [];
+      }
+      renderChats(allConversations);
+
+      // 4. Jobs
       try {
         const res = await fetch('/api/jobs');
-        if (res.ok) {
-          allJobs = (await res.json()).jobs;
-        } else {
-          throw new Error();
-        }
+        allJobs = res.ok ? (await res.json()).jobs : [];
       } catch (e) {
         try {
           const staticJobsRes = await fetch('jobs.json');
@@ -871,7 +1076,7 @@
       }
       renderJobs(allJobs);
 
-      // 4. Applications
+      // 5. Applications
       try {
         const res = await fetch('/api/applications');
         allApplications = res.ok ? (await res.json()).applications : [];
@@ -887,6 +1092,9 @@
       document.getElementById('statMeetings').textContent = allMeetings.length;
       document.getElementById('badgeMeetings').textContent = allMeetings.length;
 
+      document.getElementById('statChats').textContent = allConversations.length;
+      document.getElementById('badgeChats').textContent = allConversations.length;
+
       const activeJobsCount = allJobs.filter(j => j.status === 'Active').length;
       document.getElementById('statJobs').textContent = activeJobsCount;
       document.getElementById('badgeJobs').textContent = activeJobsCount;
@@ -895,7 +1103,13 @@
       document.getElementById('badgeApps').textContent = allApplications.length;
     }
 
-    // Render Leads
+    // Clean phone number for WhatsApp link
+    function cleanPhone(phone) {
+      if (!phone) return '';
+      return phone.replace(/[^0-9]/g, '');
+    }
+
+    // ==================== RENDER LEADS (WHO SENT IT PROMINENT) ====================
     function renderLeads(leads) {
       const tbody = document.getElementById('leadsTableBody');
       const empty = document.getElementById('emptyLeadsMessage');
@@ -912,20 +1126,41 @@
         
         let docHtml = '';
         if (l.attachment && l.attachment.fileName) {
-          docHtml = `<br><a href="${l.attachment.fileUrl || '#'}" download="${escapeHtml(l.attachment.fileName)}" target="_blank" style="display:inline-flex; align-items:center; gap:4px; color:#2563eb; font-weight:600; font-size:11.5px; margin-top:4px; text-decoration:underline;">📎 ${escapeHtml(l.attachment.fileName)}</a>`;
+          docHtml = `<br><a href="${l.attachment.fileUrl || '#'}" download="${escapeHtml(l.attachment.fileName)}" target="_blank" style="display:inline-flex; align-items:center; gap:4px; color:#2563eb; font-weight:600; font-size:11.5px; margin-top:6px; text-decoration:underline;">📎 Attached: ${escapeHtml(l.attachment.fileName)}</a>`;
         }
 
+        const phoneDigits = cleanPhone(l.phone);
+        const waLink = phoneDigits ? `https://wa.me/${phoneDigits}?text=Hi%20${encodeURIComponent(l.name)},%20this%20is%20Developer%20Paresh%20from%20INAxDeveloper.%20Regarding%20your%20inquiry%20for%20${encodeURIComponent(l.service)}:` : '';
+
         tr.innerHTML = `
-          <td style="color:var(--slate); font-size:12px;">${dt}</td>
-          <td><strong>${escapeHtml(l.name)}</strong>${l.company ? `<br><small style="color:var(--slate);">${escapeHtml(l.company)}</small>` : ''}</td>
           <td>
-            ${l.email ? `📧 <a href="mailto:${escapeHtml(l.email)}" style="color:var(--primary); text-decoration:none;">${escapeHtml(l.email)}</a><br>` : ''}
-            ${l.phone ? `📞 <a href="tel:${escapeHtml(l.phone)}" style="color:var(--dark); text-decoration:none;">${escapeHtml(l.phone)}</a>` : ''}
+            <strong style="color:#0f172a; font-size:12.5px;">${dt}</strong>
+            <div class="sender-device">💻 ${escapeHtml(l.device || 'Web Chatbot')}</div>
           </td>
-          <td><span class="badge-pill badge-blue">${escapeHtml(l.service || 'IT Inquiry')}</span></td>
-          <td><span style="font-weight:600; color:#059669;">${escapeHtml(l.budget || 'Not set')}</span></td>
-          <td style="max-width:250px; font-size:12.5px;">${escapeHtml(l.message || '-')}${docHtml}</td>
-          <td><button class="btn-delete" onclick="deleteLead('${l.id}')">Delete</button></td>
+          <td>
+            <div class="sender-box">
+              <div class="sender-name">
+                <span>👤 ${escapeHtml(l.name)}</span>
+                ${l.company ? `<span class="badge-pill badge-purple" style="font-size:10.5px;">${escapeHtml(l.company)}</span>` : ''}
+              </div>
+              <div class="sender-contact-row">
+                ${l.email ? `<a class="sender-btn email-btn" href="mailto:${escapeHtml(l.email)}">📧 ${escapeHtml(l.email)}</a>` : ''}
+                ${l.phone ? `<a class="sender-btn phone-btn" href="tel:${escapeHtml(l.phone)}">📞 ${escapeHtml(l.phone)}</a>` : ''}
+                ${waLink ? `<a class="sender-btn wa-btn" href="${waLink}" target="_blank">💬 WhatsApp</a>` : ''}
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="badge-pill badge-blue">${escapeHtml(l.service || 'IT Inquiry')}</span>
+            <div style="font-weight:700; color:#059669; font-size:12px; margin-top:4px;">💰 ${escapeHtml(l.budget || 'Not set')}</div>
+          </td>
+          <td style="max-width:280px; font-size:12.5px; line-height:1.4;">
+            ${escapeHtml(l.message || 'No description provided')}
+            ${docHtml}
+          </td>
+          <td>
+            <button class="btn-delete" onclick="deleteLead('${l.id}')">Delete</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
@@ -936,7 +1171,9 @@
       renderLeads(allLeads.filter(l => 
         (l.name && l.name.toLowerCase().includes(term)) ||
         (l.email && l.email.toLowerCase().includes(term)) ||
-        (l.service && l.service.toLowerCase().includes(term))
+        (l.phone && l.phone.toLowerCase().includes(term)) ||
+        (l.service && l.service.toLowerCase().includes(term)) ||
+        (l.message && l.message.toLowerCase().includes(term))
       ));
     }
 
@@ -947,7 +1184,7 @@
       renderLeads(allLeads);
     }
 
-    // Render Meetings
+    // ==================== RENDER MEETINGS (WHO SENT IT PROMINENT) ====================
     function renderMeetings(meetings) {
       const tbody = document.getElementById('meetingsTableBody');
       const empty = document.getElementById('emptyMeetingsMessage');
@@ -960,12 +1197,24 @@
 
       meetings.forEach(m => {
         const tr = document.createElement('tr');
+        const phoneDigits = cleanPhone(m.phone);
+        const waLink = phoneDigits ? `https://wa.me/${phoneDigits}?text=Hi%20${encodeURIComponent(m.name)},%20confirming%20your%20consultation%20with%20Developer%20Paresh%20on%20${encodeURIComponent(m.preferredDate)}%20at%20${encodeURIComponent(m.preferredTime)}:` : '';
+
         tr.innerHTML = `
-          <td><strong>📅 ${escapeHtml(m.preferredDate)}</strong><br><small style="color:var(--slate);">⏰ ${escapeHtml(m.preferredTime)}</small></td>
-          <td><strong>${escapeHtml(m.name)}</strong></td>
           <td>
-            📧 <a href="mailto:${escapeHtml(m.email)}" style="color:var(--primary); text-decoration:none;">${escapeHtml(m.email)}</a><br>
-            ${m.phone ? `📞 ${escapeHtml(m.phone)}` : ''}
+            <strong style="color:#0f172a;">📅 ${escapeHtml(m.preferredDate)}</strong><br>
+            <span style="color:#2563eb; font-weight:700; font-size:12px;">⏰ ${escapeHtml(m.preferredTime)}</span>
+          </td>
+          <td>
+            <div class="sender-box">
+              <div class="sender-name">👤 ${escapeHtml(m.name)}</div>
+              <div class="sender-contact-row">
+                ${m.email ? `<a class="sender-btn email-btn" href="mailto:${escapeHtml(m.email)}">📧 ${escapeHtml(m.email)}</a>` : ''}
+                ${m.phone ? `<a class="sender-btn phone-btn" href="tel:${escapeHtml(m.phone)}">📞 ${escapeHtml(m.phone)}</a>` : ''}
+                ${waLink ? `<a class="sender-btn wa-btn" href="${waLink}" target="_blank">💬 WhatsApp</a>` : ''}
+              </div>
+              <div class="sender-device">💻 ${escapeHtml(m.device || 'Web Chatbot')}</div>
+            </div>
           </td>
           <td><span class="badge-pill badge-green">${escapeHtml(m.meetingType || 'Consultation')}</span></td>
           <td style="max-width:220px; font-size:12.5px;">${escapeHtml(m.notes || 'No agenda note')}</td>
@@ -986,13 +1235,206 @@
     }
 
     async function deleteMeeting(id) {
-      if (!confirm('Remove this booked consultation?')) return;
+      if (!confirm('Cancel this booked consultation?')) return;
       try { await fetch(`/api/meetings/${id}`, { method: 'DELETE' }); } catch (e) {}
       allMeetings = allMeetings.filter(m => m.id !== id);
       renderMeetings(allMeetings);
     }
 
-    // Render Jobs
+    // ==================== RENDER LIVE CHATS (WHO SENT IT & TRANSCRIPTS) ====================
+    function renderChats(chats) {
+      const tbody = document.getElementById('chatsTableBody');
+      const empty = document.getElementById('emptyChatsMessage');
+      tbody.innerHTML = '';
+      if (!chats || chats.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      chats.forEach(c => {
+        const tr = document.createElement('tr');
+        const dt = c.lastActivity ? new Date(c.lastActivity).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Recently';
+        const msgs = c.messages || [];
+        const lastUserMsg = [...msgs].reverse().find(m => m.sender === 'user');
+        const snippet = lastUserMsg ? lastUserMsg.text : (msgs[msgs.length - 1]?.text || 'No text');
+
+        const phoneDigits = cleanPhone(c.senderContact);
+        const waLink = phoneDigits ? `https://wa.me/${phoneDigits}?text=Hi%20${encodeURIComponent(c.senderName)},%20this%20is%20Developer%20Paresh%20following%20up%20on%20your%20live%20chat:` : '';
+
+        tr.innerHTML = `
+          <td>
+            <strong style="color:#0f172a; font-size:12px;">${dt}</strong>
+            <div class="sender-device">💻 ${escapeHtml(c.device || 'Browser')}</div>
+          </td>
+          <td>
+            <div class="sender-box">
+              <div class="sender-name">👤 ${escapeHtml(c.senderName || 'Website Visitor')}</div>
+              ${c.senderContact ? `
+                <div class="sender-contact-row">
+                  <span class="sender-btn phone-btn">📱 ${escapeHtml(c.senderContact)}</span>
+                  ${waLink ? `<a class="sender-btn wa-btn" href="${waLink}" target="_blank">💬 WhatsApp</a>` : ''}
+                </div>
+              ` : '<small style="color:var(--slate); font-size:11px;">Anonymous Visitor</small>'}
+            </div>
+          </td>
+          <td><span class="badge-pill badge-blue">${msgs.length} messages</span></td>
+          <td style="max-width:260px; font-size:12.5px; color:#334155; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            ${escapeHtml(snippet)}
+          </td>
+          <td>
+            <button class="btn-view-transcript" onclick="openTranscriptModal('${c.id}')">👁️ View Transcript</button>
+          </td>
+          <td>
+            <button class="btn-delete" onclick="deleteConversation('${c.id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterChats() {
+      const term = document.getElementById('searchChatsInput').value.toLowerCase();
+      renderChats(allConversations.filter(c => 
+        (c.senderName && c.senderName.toLowerCase().includes(term)) ||
+        (c.senderContact && c.senderContact.toLowerCase().includes(term)) ||
+        (c.messages && c.messages.some(m => m.text && m.text.toLowerCase().includes(term)))
+      ));
+    }
+
+    function openTranscriptModal(convId) {
+      const conv = allConversations.find(c => c.id === convId);
+      if (!conv) return;
+
+      document.getElementById('modalTranscriptTitle').textContent = `Chat Transcript: ${conv.senderName}`;
+      document.getElementById('modalTranscriptSubtitle').textContent = `Device: ${conv.device || 'Web Browser'} | Started: ${new Date(conv.startedAt || conv.lastActivity).toLocaleString()}`;
+
+      const body = document.getElementById('modalTranscriptBody');
+      body.innerHTML = '';
+
+      (conv.messages || []).forEach(m => {
+        const bubble = document.createElement('div');
+        bubble.className = `modal-bubble ${m.sender === 'user' ? 'user' : 'bot'}`;
+        const timeStr = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        
+        let attachHtml = '';
+        if (m.attachment && m.attachment.fileName) {
+          attachHtml = `<div style="margin-top:6px; font-weight:600;"><a href="${m.attachment.fileUrl || '#'}" download="${escapeHtml(m.attachment.fileName)}" target="_blank" style="color:inherit; text-decoration:underline;">📎 ${escapeHtml(m.attachment.fileName)}</a></div>`;
+        }
+
+        bubble.innerHTML = `
+          <div><strong>${m.sender === 'user' ? escapeHtml(conv.senderName) : 'INAx AI'}:</strong></div>
+          <div style="margin-top:4px;">${escapeHtml(m.text || '')}</div>
+          ${attachHtml}
+          <div class="modal-time">${timeStr}</div>
+        `;
+        body.appendChild(bubble);
+      });
+
+      document.getElementById('transcriptModal').classList.add('active');
+    }
+
+    function closeTranscriptModal() {
+      document.getElementById('transcriptModal').classList.remove('active');
+    }
+
+    async function deleteConversation(id) {
+      if (!confirm('Delete this conversation log?')) return;
+      try { await fetch(`/api/conversations/${id}`, { method: 'DELETE' }); } catch (e) {}
+      allConversations = allConversations.filter(c => c.id !== id);
+      renderChats(allConversations);
+      document.getElementById('statChats').textContent = allConversations.length;
+      document.getElementById('badgeChats').textContent = allConversations.length;
+    }
+
+    // ==================== RENDER APPLICATIONS (WHO SENT IT PROMINENT) ====================
+    function renderApplications(apps) {
+      const tbody = document.getElementById('applicationsTableBody');
+      const empty = document.getElementById('emptyAppsMessage');
+      tbody.innerHTML = '';
+      if (!apps || apps.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      apps.forEach(a => {
+        const tr = document.createElement('tr');
+        const dt = a.createdAt ? new Date(a.createdAt).toLocaleString([], { dateStyle: 'short' }) : 'Recently';
+        
+        let resumeHtml = 'Not uploaded';
+        if (a.resumeFile && a.resumeFile.fileName) {
+          resumeHtml = `<a href="${a.resumeFile.fileUrl || '#'}" download="${escapeHtml(a.resumeFile.fileName)}" target="_blank" style="display:inline-flex; align-items:center; gap:4px; color:#059669; font-weight:700; text-decoration:none; background:#ecfdf5; padding:4px 9px; border-radius:6px; border:1px solid #a7f3d0;">📄 ${escapeHtml(a.resumeFile.fileName)}</a>`;
+        } else if (a.resumeLink) {
+          resumeHtml = `<a href="${escapeHtml(a.resumeLink)}" target="_blank" style="color:#059669; font-weight:600;">Open Resume Link ↗</a>`;
+        }
+
+        const phoneDigits = cleanPhone(a.phone);
+        const waLink = phoneDigits ? `https://wa.me/${phoneDigits}?text=Hi%20${encodeURIComponent(a.name)},%20this%20is%20Developer%20Paresh%20from%20INAxDeveloper%20regarding%20your%20job%20application%20for%20${encodeURIComponent(a.jobTitle)}:` : '';
+
+        tr.innerHTML = `
+          <td>
+            <strong style="color:#0f172a; font-size:12px;">${dt}</strong>
+            <div class="sender-device">💻 ${escapeHtml(a.device || 'Web Chatbot')}</div>
+          </td>
+          <td>
+            <div class="sender-box">
+              <div class="sender-name">👤 ${escapeHtml(a.name)}</div>
+              <div class="sender-contact-row">
+                ${a.email ? `<a class="sender-btn email-btn" href="mailto:${escapeHtml(a.email)}">📧 ${escapeHtml(a.email)}</a>` : ''}
+                ${a.phone ? `<a class="sender-btn phone-btn" href="tel:${escapeHtml(a.phone)}">📞 ${escapeHtml(a.phone)}</a>` : ''}
+                ${waLink ? `<a class="sender-btn wa-btn" href="${waLink}" target="_blank">💬 WhatsApp</a>` : ''}
+              </div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">⏳ Experience: <strong>${escapeHtml(a.experience || 'Not specified')}</strong></div>
+            </div>
+          </td>
+          <td><span class="badge-pill badge-purple">${escapeHtml(a.jobTitle)}</span></td>
+          <td>
+            <div>${resumeHtml}</div>
+            ${a.portfolio ? `<div style="margin-top:4px;"><a href="${escapeHtml(a.portfolio)}" target="_blank" style="color:var(--primary); font-size:11.5px; font-weight:600;">🔗 View Portfolio / LinkedIn ↗</a></div>` : ''}
+          </td>
+          <td>
+            <select onchange="updateAppStatus('${a.id}', this.value)" style="padding:4px 8px; border-radius:6px; font-size:12px; border:1px solid var(--border);">
+              <option value="New" ${a.status === 'New' ? 'selected' : ''}>New</option>
+              <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
+              <option value="Interview Scheduled" ${a.status === 'Interview Scheduled' ? 'selected' : ''}>Interview Scheduled</option>
+              <option value="Offer Made" ${a.status === 'Offer Made' ? 'selected' : ''}>Offer Made</option>
+              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+            </select>
+          </td>
+          <td><button class="btn-delete" onclick="deleteApplication('${a.id}')">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function updateAppStatus(id, newStatus) {
+      try {
+        await fetch(`/api/applications/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (e) {}
+    }
+
+    function filterApplications() {
+      const term = document.getElementById('searchAppsInput').value.toLowerCase();
+      renderApplications(allApplications.filter(a => 
+        (a.name && a.name.toLowerCase().includes(term)) ||
+        (a.jobTitle && a.jobTitle.toLowerCase().includes(term)) ||
+        (a.email && a.email.toLowerCase().includes(term))
+      ));
+    }
+
+    async function deleteApplication(id) {
+      if (!confirm('Delete this application record?')) return;
+      try { await fetch(`/api/applications/${id}`, { method: 'DELETE' }); } catch (e) {}
+      allApplications = allApplications.filter(a => a.id !== id);
+      renderApplications(allApplications);
+    }
+
+    // ==================== RENDER JOBS ====================
     function renderJobs(jobs) {
       const tbody = document.getElementById('jobsTableBody');
       const empty = document.getElementById('emptyJobsMessage');
@@ -1020,7 +1462,6 @@
       });
     }
 
-    // Add Job Form Submit
     document.getElementById('newJobForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnPostJob');
@@ -1063,83 +1504,7 @@
       renderJobs(allJobs);
     }
 
-    // Render Applications
-    function renderApplications(apps) {
-      const tbody = document.getElementById('applicationsTableBody');
-      const empty = document.getElementById('emptyAppsMessage');
-      tbody.innerHTML = '';
-      if (!apps || apps.length === 0) {
-        empty.style.display = 'block';
-        return;
-      }
-      empty.style.display = 'none';
-
-      apps.forEach(a => {
-        const tr = document.createElement('tr');
-        const dt = a.createdAt ? new Date(a.createdAt).toLocaleString([], { dateStyle: 'short' }) : 'Recently';
-        
-        let resumeHtml = 'Not linked';
-        if (a.resumeFile && a.resumeFile.fileName) {
-          resumeHtml = `<a href="${a.resumeFile.fileUrl || '#'}" download="${escapeHtml(a.resumeFile.fileName)}" target="_blank" style="display:inline-flex; align-items:center; gap:4px; color:#059669; font-weight:700; text-decoration:none; background:#ecfdf5; padding:4px 8px; border-radius:6px; border:1px solid #a7f3d0;">📄 ${escapeHtml(a.resumeFile.fileName)}</a>`;
-        } else if (a.resumeLink) {
-          resumeHtml = `<a href="${escapeHtml(a.resumeLink)}" target="_blank" style="color:#059669; font-weight:600;">Open Link ↗</a>`;
-        }
-
-        tr.innerHTML = `
-          <td style="color:var(--slate); font-size:12px;">${dt}</td>
-          <td><strong>${escapeHtml(a.name)}</strong></td>
-          <td><span class="badge-pill badge-purple">${escapeHtml(a.jobTitle)}</span></td>
-          <td>
-            📧 <a href="mailto:${escapeHtml(a.email)}" style="color:var(--primary); text-decoration:none;">${escapeHtml(a.email)}</a><br>
-            📞 ${escapeHtml(a.phone)}
-          </td>
-          <td>${escapeHtml(a.experience || 'Not specified')}</td>
-          <td>
-            ${a.portfolio ? `<a href="${escapeHtml(a.portfolio)}" target="_blank" style="color:var(--primary); font-weight:600;">View Profile ↗</a>` : '-'}
-          </td>
-          <td>${resumeHtml}</td>
-          <td>
-            <select onchange="updateAppStatus('${a.id}', this.value)" style="padding:3px 6px; border-radius:6px; font-size:11.5px; border:1px solid var(--border);">
-              <option value="New" ${a.status === 'New' ? 'selected' : ''}>New</option>
-              <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
-              <option value="Interview Scheduled" ${a.status === 'Interview Scheduled' ? 'selected' : ''}>Interview Scheduled</option>
-              <option value="Offer Made" ${a.status === 'Offer Made' ? 'selected' : ''}>Offer Made</option>
-              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
-            </select>
-          </td>
-          <td><button class="btn-delete" onclick="deleteApplication('${a.id}')">Delete</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function updateAppStatus(id, newStatus) {
-      try {
-        await fetch(`/api/applications/${id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: newStatus })
-        });
-      } catch (e) {}
-    }
-
-    function filterApplications() {
-      const term = document.getElementById('searchAppsInput').value.toLowerCase();
-      renderApplications(allApplications.filter(a => 
-        (a.name && a.name.toLowerCase().includes(term)) ||
-        (a.jobTitle && a.jobTitle.toLowerCase().includes(term)) ||
-        (a.email && a.email.toLowerCase().includes(term))
-      ));
-    }
-
-    async function deleteApplication(id) {
-      if (!confirm('Delete this application record?')) return;
-      try { await fetch(`/api/applications/${id}`, { method: 'DELETE' }); } catch (e) {}
-      allApplications = allApplications.filter(a => a.id !== id);
-      renderApplications(allApplications);
-    }
-
-    // Render FAQs
+    // ==================== RENDER FAQS ====================
     function renderFaqs(faqs) {
       const tbody = document.getElementById('faqsTableBody');
       tbody.innerHTML = '';
@@ -1263,7 +1628,7 @@
       saveBtn.textContent = '💾 Save Configuration';
     });
 
-    // Export CSV based on current tab
+    // ==================== CSV EXPORT ====================
     function exportDataCSV() {
       if (currentActiveTab === 'applicationsTab') {
         exportApplicationsCSV();
@@ -1276,27 +1641,27 @@
 
     function exportLeadsCSV() {
       if (!allLeads || allLeads.length === 0) return alert('No client leads to export!');
-      const headers = ['ID', 'Date', 'Name', 'Email', 'Phone', 'Company', 'Service', 'Budget', 'Message'];
+      const headers = ['ID', 'Date', 'Device', 'Client Name', 'Email', 'Phone', 'Company', 'Service', 'Budget', 'Message'];
       const rows = allLeads.map(l => [
-        l.id || '', l.createdAt || '', `"${l.name || ''}"`, `"${l.email || ''}"`, `"${l.phone || ''}"`, `"${l.company || ''}"`, `"${l.service || ''}"`, `"${l.budget || ''}"`, `"${(l.message || '').replace(/"/g, '""')}"`
+        l.id || '', l.createdAt || '', `"${l.device || ''}"`, `"${l.name || ''}"`, `"${l.email || ''}"`, `"${l.phone || ''}"`, `"${l.company || ''}"`, `"${l.service || ''}"`, `"${l.budget || ''}"`, `"${(l.message || '').replace(/"/g, '""')}"`
       ]);
       downloadCSV('client_leads_export.csv', [headers.join(','), ...rows.map(r => r.join(','))].join('\n'));
     }
 
     function exportApplicationsCSV() {
       if (!allApplications || allApplications.length === 0) return alert('No candidate applications to export!');
-      const headers = ['ID', 'Date', 'Candidate Name', 'Job Title', 'Email', 'Phone', 'Experience', 'Portfolio', 'Resume Link', 'Status'];
+      const headers = ['ID', 'Date', 'Device', 'Candidate Name', 'Job Title', 'Email', 'Phone', 'Experience', 'Portfolio', 'Status'];
       const rows = allApplications.map(a => [
-        a.id || '', a.createdAt || '', `"${a.name || ''}"`, `"${a.jobTitle || ''}"`, `"${a.email || ''}"`, `"${a.phone || ''}"`, `"${a.experience || ''}"`, `"${a.portfolio || ''}"`, `"${a.resumeLink || ''}"`, `"${a.status || ''}"`
+        a.id || '', a.createdAt || '', `"${a.device || ''}"`, `"${a.name || ''}"`, `"${a.jobTitle || ''}"`, `"${a.email || ''}"`, `"${a.phone || ''}"`, `"${a.experience || ''}"`, `"${a.portfolio || ''}"`, `"${a.status || ''}"`
       ]);
       downloadCSV('job_candidates_export.csv', [headers.join(','), ...rows.map(r => r.join(','))].join('\n'));
     }
 
     function exportMeetingsCSV() {
       if (!allMeetings || allMeetings.length === 0) return alert('No booked meetings to export!');
-      const headers = ['ID', 'Date', 'Time Slot', 'Client Name', 'Email', 'Phone', 'Topic', 'Agenda'];
+      const headers = ['ID', 'Date', 'Time Slot', 'Client Name', 'Email', 'Phone', 'Device', 'Topic', 'Agenda'];
       const rows = allMeetings.map(m => [
-        m.id || '', m.preferredDate || '', `"${m.preferredTime || ''}"`, `"${m.name || ''}"`, `"${m.email || ''}"`, `"${m.phone || ''}"`, `"${m.meetingType || ''}"`, `"${(m.notes || '').replace(/"/g, '""')}"`
+        m.id || '', m.preferredDate || '', `"${m.preferredTime || ''}"`, `"${m.name || ''}"`, `"${m.email || ''}"`, `"${m.phone || ''}"`, `"${m.device || ''}"`, `"${m.meetingType || ''}"`, `"${(m.notes || '').replace(/"/g, '""')}"`
       ]);
       downloadCSV('consultation_meetings_export.csv', [headers.join(','), ...rows.map(r => r.join(','))].join('\n'));
     }
