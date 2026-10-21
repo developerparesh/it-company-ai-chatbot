@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | IT Live Chatbot, Hiring & Bookings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --dark: #0f172a;
+      --slate: #64748b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --purple: #7c3aed;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--dark);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 270px;
+      background: #0f172a;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      flex-shrink: 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 30px;
+      padding: 0 8px;
+    }
+    .brand-icon {
+      background: var(--primary);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .nav-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      font-weight: 700;
+      margin: 14px 10px 6px;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    .nav-link.active {
+      background: var(--primary);
+      font-weight: 600;
+    }
+    .nav-badge {
+      margin-left: auto;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+    }
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .top-header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    .btn-purple {
+      background: var(--purple);
+      color: #ffffff;
+    }
+    .btn-purple:hover {
+      background: #6d28d9;
+    }
+    .btn-outline {
+      background: #ffffff;
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      background: #f1f5f9;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      padding: 18px 22px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+    .metric-card span {
+      font-size: 12.5px;
+      color: var(--slate);
+      font-weight: 600;
+    }
+    .metric-card h3 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-top: 4px;
+      color: var(--dark);
+    }
+
+    /* Tab view containers */
+    .tab-view {
+      display: none;
+    }
+    .tab-view.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-header h2 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .search-input {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      width: 250px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      background: #f8fafc;
+      padding: 12px 18px;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 14px 18px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+    .badge-blue { background: #eff6ff; color: var(--primary); }
+    .badge-green { background: #ecfdf5; color: #059669; }
+    .badge-purple { background: #f5f3ff; color: var(--purple); }
+    .badge-amber { background: #fffbeb; color: #d97706; }
+
+    .btn-delete {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-delete:hover {
+      background: #fecaca;
+    }
+
+    /* Forms */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group.full {
+      grid-column: span 2;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #334155;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13.5px;
+      outline: none;
+      background: #f8fafc;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+    .form-group textarea {
+      resize: vertical;
+      height: 75px;
+    }
+    .card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--slate);
+    }
+    .empty-state h4 {
+      font-size: 15px;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #ecfdf5;
+      color: #065f46;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    @media (max-width: 1024px) {
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <span>NovaByte Admin</span>
+    </div>
+
+    <div class="nav-section-title">Client Leads & Growth</div>
+    <ul class="nav-links">
+      <li class="nav-link active" onclick="switchTab('leadsTab', this)">
+        📋 Client Leads <span class="nav-badge" id="badgeLeads">0</span>
+      </li>
+      <li class="nav-link" onclick="switchTab('meetingsTab', this)">
+        📅 Online Bookings <span class="nav-badge" id="badgeMeetings">0</span>
+      </li>
+    </ul>
+
+    <div class="nav-section-title">Hiring & Careers</div>
+    <ul class="nav-links">
+      <li class="nav-link" onclick="switchTab('jobsTab', this)">
+        💼 Job Vacancies <span class="nav-badge" id="badgeJobs">0</span>
+      </li>
+      <li class="nav-link" onclick="switchTab('applicationsTab', this)">
+        🎯 Candidate Resumes <span class="nav-badge" id="badgeApps">0</span>
+      </li>
+    </ul>
+
+    <div class="nav-section-title">Chatbot & Content</div>
+    <ul class="nav-links">
+      <li class="nav-link" onclick="switchTab('promptsTab', this)">
+        💬 Custom Prompts & FAQs
+      </li>
+      <li class="nav-link" onclick="switchTab('configTab', this)">
+        ⚙️ Company & AI Settings
+      </li>
+      <li class="nav-link" onclick="switchTab('embedTab', this)">
+        💻 Widget Embed Code
+      </li>
+      <li class="nav-link" onclick="window.open('index.html', '_blank')">
+        🌐 Open Demo Website ↗
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span id="backendStatus">Checking status...</span>
+      </div>
+      <p style="margin-top:6px; opacity:0.7;">IT Live Chatbot v2.0</p>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main">
+    
+    <!-- Top Header -->
+    <div class="top-header">
+      <div>
+        <h1 id="pageTitle">Client Inquiries & Leads</h1>
+        <p style="color:var(--slate); font-size:13.5px; margin-top:3px;" id="pageSubtitle">Manage client inquiries captured by your AI Live Chatbot.</p>
+      </div>
+      <div class="btn-group" id="headerButtons">
+        <button class="btn btn-outline" onclick="refreshCurrentTab()">🔄 Refresh</button>
+        <button class="btn btn-primary" id="btnExport" onclick="exportDataCSV()">📥 Export to CSV</button>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span>Client Inquiries</span>
+        <h3 id="statTotalLeads">0</h3>
+      </div>
+      <div class="metric-card">
+        <span>Online Video Meetings</span>
+        <h3 id="statMeetings">0</h3>
+      </div>
+      <div class="metric-card">
+        <span>Active Job Vacancies</span>
+        <h3 id="statJobs">0</h3>
+      </div>
+      <div class="metric-card">
+        <span>Job Applicants</span>
+        <h3 id="statCandidates">0</h3>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 1: CLIENT LEADS ==================== -->
+    <div id="leadsTab" class="tab-view active">
+      <div class="card">
+        <div class="card-header">
+          <h2>All Client Inquiries</h2>
+          <input type="text" class="search-input" id="searchLeadsInput" placeholder="Search inquiries..." oninput="filterLeads()" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Client Name</th>
+                <th>Contact</th>
+                <th>Service Needed</th>
+                <th>Budget</th>
+                <th>Brief</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyLeadsMessage" class="empty-state" style="display:none;">
+          <h4>No client inquiries yet!</h4>
+          <p>Submit a test inquiry in the chatbot widget to see it appear here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: ONLINE MEETINGS ==================== -->
+    <div id="meetingsTab" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <h2>Scheduled Online Consultations (Google Meet / Zoom)</h2>
+          <input type="text" class="search-input" id="searchMeetingsInput" placeholder="Search meetings..." oninput="filterMeetings()" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Preferred Date & Slot</th>
+                <th>Client Name</th>
+                <th>Contact</th>
+                <th>Meeting Topic</th>
+                <th>Discussion Agenda</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="meetingsTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyMeetingsMessage" class="empty-state" style="display:none;">
+          <h4>No meeting bookings yet!</h4>
+          <p>Clients can schedule a consultation directly through the "📅 Book Meeting" button in the chatbot.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: JOB OPENINGS (ADMIN POSTING) ==================== -->
+    <div id="jobsTab" class="tab-view">
+      <!-- Create Job Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2>➕ Post a New Job Vacancy (IT Hiring)</h2>
+          <span style="font-size:12.5px; color:var(--slate);">Appears instantly in chatbot for candidates</span>
+        </div>
+        <form id="newJobForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Job Title *</label>
+              <input type="text" id="jobTitle" required placeholder="e.g. Senior React & Next.js Developer" />
+            </div>
+            <div class="form-group">
+              <label>Department *</label>
+              <select id="jobDept">
+                <option value="Frontend Development">Frontend Development</option>
+                <option value="Backend Engineering">Backend Engineering</option>
+                <option value="Mobile App Development">Mobile App Development</option>
+                <option value="AI / Machine Learning">AI / Machine Learning</option>
+                <option value="Cloud & DevOps">Cloud & DevOps</option>
+                <option value="UI/UX Product Design">UI/UX Product Design</option>
+                <option value="QA & Automation">QA & Automation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Job Type *</label>
+              <select id="jobType">
+                <option value="Full-Time (Remote)">Full-Time (Remote)</option>
+                <option value="Full-Time (On-Site / Hybrid)">Full-Time (On-Site / Hybrid)</option>
+                <option value="Part-Time / Contract">Part-Time / Contract</option>
+                <option value="Internship / Fresher">Internship / Fresher</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Experience Required *</label>
+              <input type="text" id="jobExp" required placeholder="e.g. 2 - 4 Years" />
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" id="jobLoc" placeholder="e.g. Remote (Worldwide) or Surat, India" />
+            </div>
+            <div class="form-group">
+              <label>Salary / Compensation Range</label>
+              <input type="text" id="jobSalary" placeholder="e.g. $1,800 - $3,000 / mo or ₹8 - ₹15 LPA" />
+            </div>
+            <div class="form-group full">
+              <label>Key Responsibilities & Tech Stack Required</label>
+              <textarea id="jobDesc" placeholder="Describe the day-to-day responsibilities, technologies (React, Node, AWS, etc.), and perks..."></textarea>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-purple" id="btnPostJob">💼 Post Job Opening</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Active Jobs List -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Active Job Openings</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Department</th>
+                <th>Type & Exp</th>
+                <th>Salary</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="jobsTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyJobsMessage" class="empty-state" style="display:none;">
+          <h4>No job openings posted!</h4>
+          <p>Add a vacancy above to start receiving candidates through the AI chatbot.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: JOB APPLICATIONS ==================== -->
+    <div id="applicationsTab" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <h2>Candidates & Resumes Received</h2>
+          <input type="text" class="search-input" id="searchAppsInput" placeholder="Search candidates..." oninput="filterApplications()" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Applied Date</th>
+                <th>Candidate Name</th>
+                <th>Position Applied</th>
+                <th>Contact</th>
+                <th>Experience</th>
+                <th>Portfolio / LinkedIn</th>
+                <th>Resume</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyAppsMessage" class="empty-state" style="display:none;">
+          <h4>No candidate applications yet!</h4>
+          <p>When candidates apply via the chatbot's "🎯 Careers & Jobs" button, their applications and resumes will show up here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: CUSTOM PROMPTS & FAQS ==================== -->
+    <div id="promptsTab" class="tab-view">
+      <!-- Add FAQ -->
+      <div class="card">
+        <div class="card-header">
+          <h2>💬 Add Custom Chat Question & Answer (What You Want the Bot to Answer)</h2>
+        </div>
+        <form id="newFaqForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Trigger Keywords (comma separated) *</label>
+              <input type="text" id="faqKeywords" required placeholder="e.g. refund, guarantee, discount, payment terms, nda" />
+              <small style="color:var(--slate); font-size:11.5px;">Whenever a visitor types any of these words, the bot gives this answer.</small>
+            </div>
+            <div class="form-group">
+              <label>Topic / Title</label>
+              <input type="text" id="faqTitle" placeholder="e.g. Payment & Milestone Structure" />
+            </div>
+            <div class="form-group full">
+              <label>Bot Answer Text *</label>
+              <textarea id="faqAnswer" required placeholder="Write the response the bot should give (supports markdown, bullet points)..."></textarea>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">➕ Add Knowledge FAQ</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Add Quick Action Button -->
+      <div class="card">
+        <div class="card-header">
+          <h2>🔘 Add Quick Action Button (Chat Chips)</h2>
+        </div>
+        <form id="newChipForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Button Label *</label>
+              <input type="text" id="chipLabel" required placeholder="e.g. ⚡ View Portfolio Demos" />
+            </div>
+            <div class="form-group">
+              <label>Button Action / Query *</label>
+              <input type="text" id="chipQuery" required placeholder="e.g. Can you show me some of your recent web and mobile app projects?" />
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">➕ Add Button to Chat</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Existing FAQs List -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Current Knowledge Base FAQs</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Keywords</th>
+                <th>Bot Answer</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="faqsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 6: CONFIG ==================== -->
+    <div id="configTab" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <h2>Company & AI Chatbot Branding</h2>
+        </div>
+        <form id="configForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" id="cfgCompanyName" required />
+            </div>
+            <div class="form-group">
+              <label>AI Assistant Name</label>
+              <input type="text" id="cfgBotName" required />
+            </div>
+            <div class="form-group">
+              <label>Support Email</label>
+              <input type="email" id="cfgEmail" required />
+            </div>
+            <div class="form-group">
+              <label>Contact Phone</label>
+              <input type="text" id="cfgPhone" required />
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Number (Country code + digits, no +)</label>
+              <input type="text" id="cfgWhatsapp" placeholder="919876543210" required />
+            </div>
+            <div class="form-group">
+              <label>Primary Theme Color</label>
+              <input type="color" id="cfgPrimaryColor" style="height:42px; padding:3px;" />
+            </div>
+            <div class="form-group full">
+              <label>Welcome Message</label>
+              <textarea id="cfgWelcomeMessage"></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Gemini API Key (Optional: for generative AI conversational answers)</label>
+              <input type="password" id="cfgApiKey" placeholder="AIzaSy... (Leave empty to use built-in smart rule engine)" />
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary" id="saveConfigBtn">💾 Save Configuration</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 7: EMBED ==================== -->
+    <div id="embedTab" class="tab-view">
+      <div class="card" style="padding: 24px;">
+        <h2 style="margin-bottom:12px;">How to Embed on Any Website</h2>
+        <p style="color:var(--slate); font-size:14px; margin-bottom:20px;">
+          Add this single script tag right before the closing <code>&lt;/body&gt;</code> tag of your website. It is completely lightweight (&lt;30 KB), uses Shadow DOM, and works on WordPress, Shopify, React, Next.js, and static HTML!
+        </p>
+
+        <div style="background:#0f172a; color:#f8fafc; padding:20px; border-radius:10px; font-family:monospace; font-size:14px; margin-bottom:20px;">
+          &lt;script src="it-chatbot.js"&gt;&lt;/script&gt;
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let allLeads = [];
+    let allMeetings = [];
+    let allJobs = [];
+    let allApplications = [];
+    let currentConfig = {};
+    let currentActiveTab = 'leadsTab';
+
+    function switchTab(tabId, el) {
+      currentActiveTab = tabId;
+      document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      if (el) el.classList.add('active');
+
+      const meta = {
+        'leadsTab': { title: 'Client Inquiries & Quotes', subtitle: 'Manage client project requests captured by the live chat.' },
+        'meetingsTab': { title: 'Online Video Consultations', subtitle: 'Clients who booked 1-on-1 Google Meet / Zoom discovery calls.' },
+        'jobsTab': { title: 'Job Vacancies & Hiring', subtitle: 'Post new engineering openings that appear dynamically in the chatbot.' },
+        'applicationsTab': { title: 'Candidate Resumes & Applications', subtitle: 'Review developer and designer job applications submitted via chat.' },
+        'promptsTab': { title: 'Custom Prompts & Knowledge FAQs', subtitle: 'Configure exact questions and custom answers the bot should know.' },
+        'configTab': { title: 'Company & AI Branding', subtitle: 'Customize company info, colors, and Gemini AI credentials.' },
+        'embedTab': { title: 'Widget Embed Code', subtitle: 'Copy and paste into your website in 1 line of code.' }
+      };
+
+      const info = meta[tabId] || { title: 'Admin Dashboard', subtitle: '' };
+      document.getElementById('pageTitle').textContent = info.title;
+      document.getElementById('pageSubtitle').textContent = info.subtitle;
+    }
+
+    async function checkBackend() {
+      const statusEl = document.getElementById('backendStatus');
+      try {
+        const res = await fetch('/api/config');
+        if (res.ok) {
+          statusEl.textContent = 'Server Connected (Port 3000)';
+          currentConfig = await res.json();
+          populateConfigForm(currentConfig);
+          renderFaqs(currentConfig.faq || []);
+          return;
+        }
+      } catch (err) {}
+
+      // Fallback for GitHub Pages static hosting
+      try {
+        const staticRes = await fetch('config.json');
+        if (staticRes.ok) {
+          currentConfig = await staticRes.json();
+          populateConfigForm(currentConfig);
+          renderFaqs(currentConfig.faq || []);
+          statusEl.textContent = 'GitHub Pages / Static Mode';
+          return;
+        }
+      } catch (e) {}
+
+      statusEl.textContent = 'Local Browser Mode';
+    }
+
+    // Load All Data
+    async function refreshCurrentTab() {
+      loadAllData();
+    }
+
+    async function loadAllData() {
+      // 1. Leads
+      try {
+        const res = await fetch('/api/leads');
+        allLeads = res.ok ? (await res.json()).leads : [];
+      } catch (e) {
+        allLeads = JSON.parse(localStorage.getItem('it_chatbot_leads') || '[]');
+      }
+      renderLeads(allLeads);
+
+      // 2. Meetings
+      try {
+        const res = await fetch('/api/meetings');
+        allMeetings = res.ok ? (await res.json()).meetings : [];
+      } catch (e) {
+        allMeetings = JSON.parse(localStorage.getItem('it_chatbot_meetings') || '[]');
+      }
+      renderMeetings(allMeetings);
+
+      // 3. Jobs
+      try {
+        const res = await fetch('/api/jobs');
+        if (res.ok) {
+          allJobs = (await res.json()).jobs;
+        } else {
+          throw new Error();
+        }
+      } catch (e) {
+        try {
+          const staticJobsRes = await fetch('jobs.json');
+          allJobs = staticJobsRes.ok ? await staticJobsRes.json() : [];
+        } catch (err) {
+          allJobs = [];
+        }
+      }
+      renderJobs(allJobs);
+
+      // 4. Applications
+      try {
+        const res = await fetch('/api/applications');
+        allApplications = res.ok ? (await res.json()).applications : [];
+      } catch (e) {
+        allApplications = JSON.parse(localStorage.getItem('it_chatbot_applications') || '[]');
+      }
+      renderApplications(allApplications);
+
+      // Update counters
+      document.getElementById('statTotalLeads').textContent = allLeads.length;
+      document.getElementById('badgeLeads').textContent = allLeads.length;
+
+      document.getElementById('statMeetings').textContent = allMeetings.length;
+      document.getElementById('badgeMeetings').textContent = allMeetings.length;
+
+      const activeJobsCount = allJobs.filter(j => j.status === 'Active').length;
+      document.getElementById('statJobs').textContent = activeJobsCount;
+      document.getElementById('badgeJobs').textContent = activeJobsCount;
+
+      document.getElementById('statCandidates').textContent = allApplications.length;
+      document.getElementById('badgeApps').textContent = allApplications.length;
+    }
+
+    // Render Leads
+    function renderLeads(leads) {
+      const tbody = document.getElementById('leadsTableBody');
+      const empty = document.getElementById('emptyLeadsMessage');
+      tbody.innerHTML = '';
+      if (!leads || leads.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      leads.forEach(l => {
+        const tr = document.createElement('tr');
+        const dt = l.createdAt ? new Date(l.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Just now';
+        tr.innerHTML = `
+          <td style="color:var(--slate); font-size:12px;">${dt}</td>
+          <td><strong>${escapeHtml(l.name)}</strong>${l.company ? `<br><small style="color:var(--slate);">${escapeHtml(l.company)}</small>` : ''}</td>
+          <td>
+            ${l.email ? `📧 <a href="mailto:${escapeHtml(l.email)}" style="color:var(--primary); text-decoration:none;">${escapeHtml(l.email)}</a><br>` : ''}
+            ${l.phone ? `📞 <a href="tel:${escapeHtml(l.phone)}" style="color:var(--dark); text-decoration:none;">${escapeHtml(l.phone)}</a>` : ''}
+          </td>
+          <td><span class="badge-pill badge-blue">${escapeHtml(l.service || 'IT Inquiry')}</span></td>
+          <td><span style="font-weight:600; color:#059669;">${escapeHtml(l.budget || 'Not set')}</span></td>
+          <td style="max-width:250px; font-size:12.5px;">${escapeHtml(l.message || '-')}</td>
+          <td><button class="btn-delete" onclick="deleteLead('${l.id}')">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterLeads() {
+      const term = document.getElementById('searchLeadsInput').value.toLowerCase();
+      renderLeads(allLeads.filter(l => 
+        (l.name && l.name.toLowerCase().includes(term)) ||
+        (l.email && l.email.toLowerCase().includes(term)) ||
+        (l.service && l.service.toLowerCase().includes(term))
+      ));
+    }
+
+    async function deleteLead(id) {
+      if (!confirm('Delete this inquiry?')) return;
+      try { await fetch(`/api/leads/${id}`, { method: 'DELETE' }); } catch (e) {}
+      allLeads = allLeads.filter(l => l.id !== id);
+      renderLeads(allLeads);
+    }
+
+    // Render Meetings
+    function renderMeetings(meetings) {
+      const tbody = document.getElementById('meetingsTableBody');
+      const empty = document.getElementById('emptyMeetingsMessage');
+      tbody.innerHTML = '';
+      if (!meetings || meetings.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      meetings.forEach(m => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>📅 ${escapeHtml(m.preferredDate)}</strong><br><small style="color:var(--slate);">⏰ ${escapeHtml(m.preferredTime)}</small></td>
+          <td><strong>${escapeHtml(m.name)}</strong></td>
+          <td>
+            📧 <a href="mailto:${escapeHtml(m.email)}" style="color:var(--primary); text-decoration:none;">${escapeHtml(m.email)}</a><br>
+            ${m.phone ? `📞 ${escapeHtml(m.phone)}` : ''}
+          </td>
+          <td><span class="badge-pill badge-green">${escapeHtml(m.meetingType || 'Consultation')}</span></td>
+          <td style="max-width:220px; font-size:12.5px;">${escapeHtml(m.notes || 'No agenda note')}</td>
+          <td><span class="badge-pill badge-purple">Confirmed</span></td>
+          <td><button class="btn-delete" onclick="deleteMeeting('${m.id}')">Cancel</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterMeetings() {
+      const term = document.getElementById('searchMeetingsInput').value.toLowerCase();
+      renderMeetings(allMeetings.filter(m => 
+        (m.name && m.name.toLowerCase().includes(term)) ||
+        (m.email && m.email.toLowerCase().includes(term)) ||
+        (m.meetingType && m.meetingType.toLowerCase().includes(term))
+      ));
+    }
+
+    async function deleteMeeting(id) {
+      if (!confirm('Remove this booked consultation?')) return;
+      try { await fetch(`/api/meetings/${id}`, { method: 'DELETE' }); } catch (e) {}
+      allMeetings = allMeetings.filter(m => m.id !== id);
+      renderMeetings(allMeetings);
+    }
+
+    // Render Jobs
+    function renderJobs(jobs) {
+      const tbody = document.getElementById('jobsTableBody');
+      const empty = document.getElementById('emptyJobsMessage');
+      tbody.innerHTML = '';
+      if (!jobs || jobs.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      jobs.forEach(j => {
+        const tr = document.createElement('tr');
+        const isActive = j.status === 'Active';
+        tr.innerHTML = `
+          <td><strong>${escapeHtml(j.title)}</strong><br><small style="color:var(--slate);">${escapeHtml(j.location || 'Remote')}</small></td>
+          <td><span class="badge-pill badge-blue">${escapeHtml(j.department || 'Engineering')}</span></td>
+          <td>${escapeHtml(j.type)}<br><small style="color:var(--slate);">Exp: ${escapeHtml(j.experience)}</small></td>
+          <td>${escapeHtml(j.salary || 'Flexible')}</td>
+          <td><span class="badge-pill ${isActive ? 'badge-green' : 'badge-amber'}">${escapeHtml(j.status)}</span></td>
+          <td>
+            <button class="btn-delete" onclick="deleteJob('${j.id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Add Job Form Submit
+    document.getElementById('newJobForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnPostJob');
+      btn.disabled = true;
+      btn.textContent = 'Posting Vacancy...';
+
+      const jobData = {
+        title: document.getElementById('jobTitle').value,
+        department: document.getElementById('jobDept').value,
+        type: document.getElementById('jobType').value,
+        experience: document.getElementById('jobExp').value,
+        location: document.getElementById('jobLoc').value,
+        salary: document.getElementById('jobSalary').value,
+        description: document.getElementById('jobDesc').value,
+        status: 'Active'
+      };
+
+      try {
+        const res = await fetch('/api/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(jobData)
+        });
+        if (res.ok) {
+          alert('Job vacancy posted successfully! Candidates can now find it in the chatbot.');
+          document.getElementById('newJobForm').reset();
+          loadAllData();
+        }
+      } catch (err) {
+        alert('Saved locally.');
+      }
+      btn.disabled = false;
+      btn.textContent = '💼 Post Job Opening';
+    });
+
+    async function deleteJob(id) {
+      if (!confirm('Are you sure you want to delete this job vacancy?')) return;
+      try { await fetch(`/api/jobs/${id}`, { method: 'DELETE' }); } catch (e) {}
+      allJobs = allJobs.filter(j => j.id !== id);
+      renderJobs(allJobs);
+    }
+
+    // Render Applications
+    function renderApplications(apps) {
+      const tbody = document.getElementById('applicationsTableBody');
+      const empty = document.getElementById('emptyAppsMessage');
+      tbody.innerHTML = '';
+      if (!apps || apps.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      apps.forEach(a => {
+        const tr = document.createElement('tr');
+        const dt = a.createdAt ? new Date(a.createdAt).toLocaleString([], { dateStyle: 'short' }) : 'Recently';
+        tr.innerHTML = `
+          <td style="color:var(--slate); font-size:12px;">${dt}</td>
+          <td><strong>${escapeHtml(a.name)}</strong></td>
+          <td><span class="badge-pill badge-purple">${escapeHtml(a.jobTitle)}</span></td>
+          <td>
+            📧 <a href="mailto:${escapeHtml(a.email)}" style="color:var(--primary); text-decoration:none;">${escapeHtml(a.email)}</a><br>
+            📞 ${escapeHtml(a.phone)}
+          </td>
+          <td>${escapeHtml(a.experience || 'Not specified')}</td>
+          <td>
+            ${a.portfolio ? `<a href="${escapeHtml(a.portfolio)}" target="_blank" style="color:var(--primary); font-weight:600;">View Profile ↗</a>` : '-'}
+          </td>
+          <td>
+            ${a.resumeLink ? `<a href="${escapeHtml(a.resumeLink)}" target="_blank" style="color:#059669; font-weight:600;">Open Resume 📄</a>` : 'Not linked'}
+          </td>
+          <td>
+            <select onchange="updateAppStatus('${a.id}', this.value)" style="padding:3px 6px; border-radius:6px; font-size:11.5px; border:1px solid var(--border);">
+              <option value="New" ${a.status === 'New' ? 'selected' : ''}>New</option>
+              <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
+              <option value="Interview Scheduled" ${a.status === 'Interview Scheduled' ? 'selected' : ''}>Interview Scheduled</option>
+              <option value="Offer Made" ${a.status === 'Offer Made' ? 'selected' : ''}>Offer Made</option>
+              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+            </select>
+          </td>
+          <td><button class="btn-delete" onclick="deleteApplication('${a.id}')">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function updateAppStatus(id, newStatus) {
+      try {
+        await fetch(`/api/applications/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (e) {}
+    }
+
+    function filterApplications() {
+      const term = document.getElementById('searchAppsInput').value.toLowerCase();
+      renderApplications(allApplications.filter(a => 
+        (a.name && a.name.toLowerCase().includes(term)) ||
+        (a.jobTitle && a.jobTitle.toLowerCase().includes(term)) ||
+        (a.email && a.email.toLowerCase().includes(term))
+      ));
+    }
+
+    async function deleteApplication(id) {
+      if (!confirm('Delete this application record?')) return;
+      try { await fetch(`/api/applications/${id}`, { method: 'DELETE' }); } catch (e) {}
+      allApplications = allApplications.filter(a => a.id !== id);
+      renderApplications(allApplications);
+    }
+
+    // Render FAQs
+    function renderFaqs(faqs) {
+      const tbody = document.getElementById('faqsTableBody');
+      tbody.innerHTML = '';
+      if (!faqs || faqs.length === 0) return;
+
+      faqs.forEach((f, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${(f.keywords || []).join(', ')}</strong></td>
+          <td style="max-width:350px; font-size:12.5px; white-space:pre-wrap;">${escapeHtml(f.answer)}</td>
+          <td><button class="btn-delete" onclick="deleteFaq(${idx})">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('newFaqForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawKw = document.getElementById('faqKeywords').value;
+      const keywords = rawKw.split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+      const answer = document.getElementById('faqAnswer').value;
+
+      currentConfig.faq = currentConfig.faq || [];
+      currentConfig.faq.unshift({
+        id: 'faq_' + Date.now(),
+        keywords: keywords,
+        answer: answer
+      });
+
+      try {
+        await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentConfig)
+        });
+        alert('Custom FAQ knowledge added successfully!');
+        document.getElementById('newFaqForm').reset();
+        renderFaqs(currentConfig.faq);
+      } catch (e) {
+        alert('Saved locally.');
+      }
+    });
+
+    async function deleteFaq(index) {
+      if (!confirm('Delete this FAQ?')) return;
+      currentConfig.faq.splice(index, 1);
+      try {
+        await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentConfig)
+        });
+      } catch (e) {}
+      renderFaqs(currentConfig.faq);
+    }
+
+    document.getElementById('newChipForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const label = document.getElementById('chipLabel').value;
+      const query = document.getElementById('chipQuery').value;
+
+      currentConfig.quickActions = currentConfig.quickActions || [];
+      currentConfig.quickActions.push({
+        id: 'qa_' + Date.now(),
+        label: label,
+        query: query,
+        action: 'chat'
+      });
+
+      try {
+        await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentConfig)
+        });
+        alert('New button added to chatbot interface!');
+        document.getElementById('newChipForm').reset();
+      } catch (e) {
+        alert('Saved.');
+      }
+    });
+
+    // Populate Company Config Form
+    function populateConfigForm(cfg) {
+      if (!cfg || !cfg.company) return;
+      document.getElementById('cfgCompanyName').value = cfg.company.name || '';
+      document.getElementById('cfgBotName').value = cfg.company.botName || '';
+      document.getElementById('cfgEmail').value = cfg.company.supportEmail || '';
+      document.getElementById('cfgPhone').value = cfg.company.phone || '';
+      document.getElementById('cfgWhatsapp').value = cfg.company.whatsappNumber || '';
+      document.getElementById('cfgPrimaryColor').value = cfg.company.primaryColor || '#2563eb';
+      document.getElementById('cfgWelcomeMessage').value = cfg.company.welcomeMessage || '';
+    }
+
+    document.getElementById('configForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveConfigBtn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+
+      currentConfig.company = currentConfig.company || {};
+      currentConfig.company.name = document.getElementById('cfgCompanyName').value;
+      currentConfig.company.botName = document.getElementById('cfgBotName').value;
+      currentConfig.company.supportEmail = document.getElementById('cfgEmail').value;
+      currentConfig.company.phone = document.getElementById('cfgPhone').value;
+      currentConfig.company.whatsappNumber = document.getElementById('cfgWhatsapp').value;
+      currentConfig.company.primaryColor = document.getElementById('cfgPrimaryColor').value;
+      currentConfig.company.welcomeMessage = document.getElementById('cfgWelcomeMessage').value;
+
+      try {
+        const res = await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentConfig)
+        });
+        if (res.ok) alert('Settings saved successfully!');
+      } catch (err) {
+        alert('Configuration saved.');
+      }
+      saveBtn.disabled = false;
+      saveBtn.textContent = '💾 Save Configuration';
+    });
+
+    // Export CSV based on current tab
+    function exportDataCSV() {
+      if (currentActiveTab === 'applicationsTab') {
+        exportApplicationsCSV();
+      } else if (currentActiveTab === 'meetingsTab') {
+        exportMeetingsCSV();
+      } else {
+        exportLeadsCSV();
+      }
+    }
+
+    function exportLeadsCSV() {
+      if (!allLeads || allLeads.length === 0) return alert('No client leads to export!');
+      const headers = ['ID', 'Date', 'Name', 'Email', 'Phone', 'Company', 'Service', 'Budget', 'Message'];
+      const rows = allLeads.map(l => [
+        l.id || '', l.createdAt || '', `"${l.name || ''}"`, `"${l.email || ''}"`, `"${l.phone || ''}"`, `"${l.company || ''}"`, `"${l.service || ''}"`, `"${l.budget || ''}"`, `"${(l.message || '').replace(/"/g, '""')}"`
+      ]);
+      downloadCSV('client_leads_export.csv', [headers.join(','), ...rows.map(r => r.join(','))].join('\n'));
+    }
+
+    function exportApplicationsCSV() {
+      if (!allApplications || allApplications.length === 0) return alert('No candidate applications to export!');
+      const headers = ['ID', 'Date', 'Candidate Name', 'Job Title', 'Email', 'Phone', 'Experience', 'Portfolio', 'Resume Link', 'Status'];
+      const rows = allApplications.map(a => [
+        a.id || '', a.createdAt || '', `"${a.name || ''}"`, `"${a.jobTitle || ''}"`, `"${a.email || ''}"`, `"${a.phone || ''}"`, `"${a.experience || ''}"`, `"${a.portfolio || ''}"`, `"${a.resumeLink || ''}"`, `"${a.status || ''}"`
+      ]);
+      downloadCSV('job_candidates_export.csv', [headers.join(','), ...rows.map(r => r.join(','))].join('\n'));
+    }
+
+    function exportMeetingsCSV() {
+      if (!allMeetings || allMeetings.length === 0) return alert('No booked meetings to export!');
+      const headers = ['ID', 'Date', 'Time Slot', 'Client Name', 'Email', 'Phone', 'Topic', 'Agenda'];
+      const rows = allMeetings.map(m => [
+        m.id || '', m.preferredDate || '', `"${m.preferredTime || ''}"`, `"${m.name || ''}"`, `"${m.email || ''}"`, `"${m.phone || ''}"`, `"${m.meetingType || ''}"`, `"${(m.notes || '').replace(/"/g, '""')}"`
+      ]);
+      downloadCSV('consultation_meetings_export.csv', [headers.join(','), ...rows.map(r => r.join(','))].join('\n'));
+    }
+
+    function downloadCSV(filename, csvContent) {
+      const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Init
+    checkBackend();
+    loadAllData();
+  </script>
+</body>
+</html>

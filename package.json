@@ -1,0 +1,23 @@
+{
+  "name": "it-company-ai-chatbot",
+  "version": "1.0.0",
+  "description": "Lightweight, embeddable AI live chat widget for IT companies to handle client queries and capture leads.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "chatbot",
+    "ai",
+    "it-company",
+    "livechat",
+    "lead-generation",
+    "lightweight"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaByte Infotech | Next-Gen IT, Software Development & Careers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --dark: #0f172a;
+      --slate: #475569;
+      --light-bg: #f8fafc;
+      --border: #e2e8f0;
+      --purple: #7c3aed;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      color: var(--dark);
+      background-color: #ffffff;
+      line-height: 1.6;
+    }
+
+    /* Top demo banner */
+    .demo-bar {
+      background: linear-gradient(90deg, #1e293b, #0f172a);
+      color: #94a3b8;
+      font-size: 13px;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .demo-bar a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .demo-bar a:hover {
+      text-decoration: underline;
+    }
+
+    /* Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--dark);
+      text-decoration: none;
+    }
+    .logo-badge {
+      background: var(--primary);
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 28px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--slate);
+      font-weight: 500;
+      font-size: 14.5px;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: var(--primary);
+    }
+    .cta-nav {
+      background: var(--primary);
+      color: #ffffff !important;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .cta-nav:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 70px 24px 50px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      border: 1px solid #dbeafe;
+    }
+    .hero h1 {
+      font-size: 50px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--slate);
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+    .hero-btns {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    .btn-purple {
+      background: var(--purple);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+    .btn-purple:hover {
+      background: #6d28d9;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--light-bg);
+      border-color: #cbd5e1;
+    }
+
+    /* Stats strip */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      margin: 45px auto 0;
+      padding: 24px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    }
+    .stat-item h3 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .stat-item p {
+      font-size: 14px;
+      color: var(--slate);
+      margin: 0;
+    }
+
+    /* Services Section */
+    .services-section {
+      background: var(--light-bg);
+      padding: 70px 24px;
+    }
+    .section-title {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 45px;
+    }
+    .section-title h2 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      margin-bottom: 12px;
+    }
+    .section-title p {
+      color: var(--slate);
+      font-size: 15.5px;
+    }
+
+    .services-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 26px;
+    }
+    .service-card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06);
+      border-color: #cbd5e1;
+    }
+    .service-icon {
+      font-size: 34px;
+      margin-bottom: 16px;
+    }
+    .service-card h3 {
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .service-card p {
+      color: var(--slate);
+      font-size: 14px;
+      margin-bottom: 18px;
+      flex: 1;
+    }
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tech-tag {
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 6px;
+    }
+
+    /* Careers Strip */
+    .careers-banner {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      color: #ffffff;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    .careers-banner h2 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .careers-banner p {
+      color: #cbd5e1;
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 28px;
+    }
+
+    /* Footer */
+    footer {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 60px 24px 30px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #1e293b;
+    }
+    .footer-col h4 {
+      color: #ffffff;
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col li {
+      margin-bottom: 8px;
+    }
+    .footer-col a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover {
+      color: #ffffff;
+    }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Demo Notice Banner -->
+  <div class="demo-bar">
+    <div>
+      🤖 <strong>AI Chatbot Active:</strong> Handles Client Quotes, Online Video Bookings, & Job Seekers.
+    </div>
+    <div>
+      <a href="admin.html" target="_blank">📊 Open Admin Leads & Hiring Dashboard &rarr;</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <div class="logo-badge">NB</div>
+        <span>NovaByte Infotech</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#services">IT Services</a></li>
+          <li><a href="#careers">Careers & Hiring</a></li>
+          <li><a href="admin.html">Admin Portal</a></li>
+        </ul>
+      </nav>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-outline" style="padding:8px 14px; font-size:13.5px;" onclick="triggerChatbotModal('btnOpenBooking')">
+          📅 Book Meeting
+        </button>
+        <button class="cta-nav" onclick="triggerChatbotModal('btnOpenQuote')">
+          Get a Quote
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span>🚀 Enterprise Software Engineering & Cloud Solutions</span>
+    </div>
+    <h1>Building Scalable <span>Software & Teams</span> for High-Growth Companies</h1>
+    <p>From full-stack SaaS and cross-platform mobile apps to AI agents and dedicated remote developers, we deliver end-to-end technology solutions.</p>
+    
+    <div class="hero-btns">
+      <button class="btn btn-primary" onclick="triggerChatbotModal('launcherBtn')">
+        💬 Chat with AI Consultant
+      </button>
+      <button class="btn btn-secondary" onclick="triggerChatbotModal('btnOpenBooking')">
+        📅 Schedule Video Call
+      </button>
+      <button class="btn btn-purple" onclick="triggerChatbotModal('btnOpenJobs')">
+        🎯 Browse Open Jobs & Apply
+      </button>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-item">
+        <h3>150+</h3>
+        <p>Projects Delivered</p>
+      </div>
+      <div class="stat-item">
+        <h3>99.4%</h3>
+        <p>Client Satisfaction</p>
+      </div>
+      <div class="stat-item">
+        <h3>40+</h3>
+        <p>Senior Developers</p>
+      </div>
+      <div class="stat-item">
+        <h3>24/7</h3>
+        <p>Support & SLA</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Grid -->
+  <section class="services-section" id="services">
+    <div class="section-title">
+      <h2>Full-Cycle IT Services</h2>
+      <p>Custom software engineering solutions tailored to scale your business operations and revenue.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🌐</div>
+        <h3>Custom Web & SaaS Apps</h3>
+        <p>Scalable web applications, customer portals, and microservices built with modern responsive frameworks.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Next.js</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">Python</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Mobile App Development</h3>
+        <p>Cross-platform and native iOS & Android applications with seamless animations and native performance.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Flutter</span>
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">Swift</span>
+          <span class="tech-tag">Kotlin</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>AI & Machine Learning</h3>
+        <p>Intelligent agentic chatbots, custom LLM fine-tuning, workflow automations, and predictive analytics.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Gemini API</span>
+          <span class="tech-tag">LangChain</span>
+          <span class="tech-tag">Vector DB</span>
+          <span class="tech-tag">PyTorch</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">☁️</div>
+        <h3>Cloud & DevOps Engineering</h3>
+        <p>Automated CI/CD pipelines, container orchestration, multi-cloud infrastructure, and 99.99% uptime guarantees.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">AWS</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">Kubernetes</span>
+          <span class="tech-tag">Terraform</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">👨‍💻</div>
+        <h3>Dedicated Tech Teams</h3>
+        <p>Augment your engineering department with pre-vetted senior developers working dedicatedly in your time zone.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Full-Time</span>
+          <span class="tech-tag">Contract</span>
+          <span class="tech-tag">Flexible Trial</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3>UI/UX & Product Design</h3>
+        <p>Human-centered user experiences, wireframes, design systems, and clickable Figma prototypes.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Figma</span>
+          <span class="tech-tag">Design Systems</span>
+          <span class="tech-tag">Prototyping</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Careers Banner -->
+  <section class="careers-banner" id="careers">
+    <h2>We're Hiring Passionate Engineers! 🚀</h2>
+    <p>Looking for an exciting career in software development, mobile apps, or AI? We offer flexible remote work, cutting-edge tech stacks, and competitive compensation.</p>
+    <button class="btn btn-purple" onclick="triggerChatbotModal('btnOpenJobs')">
+      🎯 View Open Vacancies & Apply via Chat
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>NovaByte Infotech</h4>
+        <p>Global IT software engineering company building high-performance web, mobile, and AI solutions.</p>
+        <p style="margin-top:10px;">📧 contact@novabyteinfotech.com<br>📞 +91 98765 43210</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Custom Web Development</a></li>
+          <li><a href="#services">Mobile App Development</a></li>
+          <li><a href="#services">AI & LLM Integration</a></li>
+          <li><a href="#services">Cloud & DevOps</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Careers</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="triggerChatbotModal('btnOpenJobs')">Open Job Positions</a></li>
+          <li><a href="javascript:void(0)" onclick="triggerChatbotModal('btnOpenJobs')">Apply for Tech Jobs</a></li>
+          <li><a href="admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>AI Assistant</h4>
+        <p>Handles Quotes, Online Video Bookings, & Job Seekers 24/7.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 NovaByte Infotech. All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- Helper to open chatbot actions from landing page buttons -->
+  <script>
+    function triggerChatbotModal(actionId) {
+      const host = document.querySelector('#it-chatbot-root');
+      if (host && host.shadowRoot) {
+        const launcher = host.shadowRoot.querySelector('#launcherBtn');
+        const chatWin = host.shadowRoot.querySelector('#chatWindow');
+        if (!chatWin.classList.contains('open') && launcher) {
+          launcher.click();
+        }
+        if (actionId && actionId !== 'launcherBtn') {
+          setTimeout(() => {
+            const btn = host.shadowRoot.querySelector('#' + actionId);
+            if (btn) btn.click();
+          }, 150);
+        }
+      }
+    }
+  </script>
+
+  <!-- EMBED CHATBOT WIDGET -->
+  <script src="it-chatbot.js"></script>
+
+</body>
+</html>
