@@ -247,6 +247,17 @@
       justify-content: center;
       font-size: 20px;
       border: 2px solid rgba(255, 255, 255, 0.4);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .bot-avatar.speaking {
+      border-color: #a7f3d0;
+      animation: avatarSpeakingPulse 1.4s infinite;
+    }
+    @keyframes avatarSpeakingPulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8), 0 0 12px rgba(52, 211, 153, 0.6); }
+      50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0), 0 0 20px rgba(52, 211, 153, 0.9); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 12px rgba(52, 211, 153, 0.6); }
     }
     .online-dot {
       position: absolute;
@@ -523,7 +534,7 @@
       align-items: center;
       gap: 8px;
     }
-    .attach-btn {
+    .attach-btn, .mic-btn {
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -535,6 +546,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .attach-btn:hover {
       background: #e2e8f0;
@@ -544,6 +556,53 @@
       width: 18px;
       height: 18px;
       fill: currentColor;
+    }
+    .mic-btn:hover {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+    .mic-btn svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+    .mic-btn.listening {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #dc2626;
+      animation: micPulse 1.2s infinite;
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); transform: scale(1); }
+      50% { box-shadow: 0 0 0 9px rgba(239, 68, 68, 0); transform: scale(1.08); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1); }
+    }
+
+    .speak-msg-btn {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      font-size: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+      transition: all 0.15s;
+    }
+    .speak-msg-btn:hover {
+      background: #eff6ff;
+      color: ${activeConfig.primaryColor};
+      border-color: #bfdbfe;
+    }
+    .speak-msg-btn.speaking {
+      background: #dbeafe;
+      color: ${activeConfig.primaryColor};
+      border-color: ${activeConfig.primaryColor};
+      font-weight: 700;
     }
     .chat-input {
       flex: 1;
@@ -807,7 +866,10 @@
           </div>
         </div>
         <div class="header-actions">
-          <button class="header-btn" id="soundToggleBtn" title="Mute/Unmute sound">
+          <button class="header-btn" id="voiceToggleBtn" title="Toggle Real Human Voice Output (Speech)">
+            <svg id="iconVoice" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+          </button>
+          <button class="header-btn" id="soundToggleBtn" title="Mute/Unmute sound chime">
             <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
           </button>
           <button class="header-btn" id="closeChatBtn" title="Close chat">
@@ -847,7 +909,10 @@
         <button class="attach-btn" id="attachFileBtn" title="Attach Document / Resume / Scope" aria-label="Attach File">
           <svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
         </button>
-        <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question or attach document..." />
+        <button class="mic-btn" id="micBtn" title="Voice Typing (Speak your question)" aria-label="Microphone">
+          <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+        </button>
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question or speak..." />
         <button class="send-btn" id="sendBtn" title="Send message" aria-label="Send">
           <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -1226,8 +1291,164 @@
   }
 
   let isSoundEnabled = true;
+  let isVoiceOutputEnabled = true;
   let isOpen = false;
   let chatHistory = [];
+
+  // ==================== REALISTIC VOICE ENGINE (TTS) ====================
+  let availableVoices = [];
+  function loadVoices() {
+    if ('speechSynthesis' in window) {
+      availableVoices = window.speechSynthesis.getVoices();
+    }
+  }
+  if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  function getBestRealisticVoice() {
+    if (!availableVoices || availableVoices.length === 0) loadVoices();
+    if (!availableVoices || availableVoices.length === 0) return null;
+
+    // 1. Natural / Online / Neural voices (Edge / Chrome)
+    const natural = availableVoices.find(v => /natural|online|neural|google/i.test(v.name) && /^en/i.test(v.lang));
+    if (natural) return natural;
+
+    // 2. Clear English voices
+    const en = availableVoices.find(v => /^en[-_]/i.test(v.lang));
+    if (en) return en;
+
+    return availableVoices[0];
+  }
+
+  function cleanSpeechText(text) {
+    if (!text) return '';
+    return text
+      .replace(/[*_#`~]/g, '')
+      .replace(/\[.*?\]\(.*?\)/g, '')
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/[•\-]\s+/g, '')
+      .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function stopSpeaking() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    const avatar = shadow.querySelector('.bot-avatar');
+    if (avatar) avatar.classList.remove('speaking');
+    shadow.querySelectorAll('.speak-msg-btn').forEach(b => {
+      b.classList.remove('speaking');
+      b.textContent = '🔊 Listen';
+    });
+  }
+
+  function speakMessage(rawText, btnEl) {
+    if (!('speechSynthesis' in window)) return;
+
+    if (btnEl && btnEl.classList.contains('speaking')) {
+      stopSpeaking();
+      return;
+    }
+
+    stopSpeaking();
+
+    const cleanText = cleanSpeechText(rawText);
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const voice = getBestRealisticVoice();
+    if (voice) utterance.voice = voice;
+    utterance.rate = 1.02;
+    utterance.pitch = 1.0;
+
+    const avatar = shadow.querySelector('.bot-avatar');
+
+    utterance.onstart = () => {
+      if (avatar) avatar.classList.add('speaking');
+      if (btnEl) {
+        btnEl.classList.add('speaking');
+        btnEl.textContent = '⏹ Stop';
+      }
+    };
+
+    utterance.onend = utterance.onerror = () => {
+      if (avatar) avatar.classList.remove('speaking');
+      if (btnEl) {
+        btnEl.classList.remove('speaking');
+        btnEl.textContent = '🔊 Listen';
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Header Voice Toggle
+  const voiceToggleBtn = shadow.getElementById('voiceToggleBtn');
+  if (voiceToggleBtn) {
+    voiceToggleBtn.addEventListener('click', () => {
+      isVoiceOutputEnabled = !isVoiceOutputEnabled;
+      voiceToggleBtn.style.opacity = isVoiceOutputEnabled ? '1' : '0.4';
+      if (!isVoiceOutputEnabled) stopSpeaking();
+    });
+  }
+
+  // ==================== VOICE INPUT (SPEECH-TO-TEXT) ====================
+  const micBtn = shadow.getElementById('micBtn');
+  let recognition = null;
+  let isRecognizing = false;
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRec();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      isRecognizing = true;
+      micBtn.classList.add('listening');
+      chatInput.placeholder = '🎙️ Listening... Speak your query now!';
+    };
+
+    recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        transcript += event.results[i][0].transcript;
+      }
+      chatInput.value = transcript;
+    };
+
+    recognition.onend = () => {
+      isRecognizing = false;
+      micBtn.classList.remove('listening');
+      chatInput.placeholder = 'Ask a question or speak...';
+      chatInput.focus();
+    };
+
+    recognition.onerror = () => {
+      isRecognizing = false;
+      micBtn.classList.remove('listening');
+      chatInput.placeholder = 'Ask a question or speak...';
+    };
+  }
+
+  if (micBtn) {
+    micBtn.addEventListener('click', () => {
+      if (!recognition) {
+        alert('Voice microphone input is supported in Google Chrome, Microsoft Edge, and Safari. Please type your query.');
+        return;
+      }
+      if (isRecognizing) {
+        recognition.stop();
+      } else {
+        recognition.start();
+      }
+    });
+  }
 
   function toggleChat(forceState) {
     isOpen = typeof forceState === 'boolean' ? forceState : !isOpen;
@@ -1241,6 +1462,7 @@
       chatWindow.classList.remove('open');
       iconChat.style.display = 'block';
       iconClose.style.display = 'none';
+      stopSpeaking();
       [quoteModal, bookingModal, jobsModal, applyModal].forEach(m => m.classList.remove('active'));
     }
   }
@@ -1303,6 +1525,20 @@
     const time = document.createElement('div');
     time.className = 'msg-time';
     time.textContent = getTimeStr();
+
+    if (sender === 'bot') {
+      const speakBtn = document.createElement('button');
+      speakBtn.className = 'speak-msg-btn';
+      speakBtn.innerHTML = '🔊 Listen';
+      speakBtn.title = 'Listen in realistic human voice';
+      speakBtn.addEventListener('click', () => speakMessage(text, speakBtn));
+      time.appendChild(speakBtn);
+
+      // Auto-speak if voice is enabled and chat window is actively open
+      if (isOpen && isVoiceOutputEnabled) {
+        setTimeout(() => speakMessage(text, speakBtn), 250);
+      }
+    }
 
     group.appendChild(bubble);
     group.appendChild(time);
