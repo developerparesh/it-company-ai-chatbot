@@ -1,7 +1,11 @@
 /**
- * IT Company AI Live Chatbot Widget
- * Lightweight, zero-dependency, Shadow-DOM encapsulated live chat widget for IT companies.
- * Handles client inquiries, quotes, tech stack queries, online meeting bookings, and job finding/applications.
+ * INAxDeveloper AI Live Chatbot Widget
+ * Developed by Developer Paresh
+ * Lightweight, zero-dependency, Shadow-DOM encapsulated live chat widget with:
+ * - Document & Resume attachment in chat
+ * - Job candidate resume uploading (.PDF, .DOCX)
+ * - Project RFP / wireframe attachment
+ * - Online meeting booking & client leads
  */
 (function () {
   'use strict';
@@ -21,7 +25,7 @@
     whatsappNumber: userConfig.whatsappNumber || '919876543210',
     supportEmail: userConfig.supportEmail || 'pareshchauhan39500@gmail.com',
     phone: userConfig.phone || '+91 98765 43210',
-    welcomeMessage: userConfig.welcomeMessage || "Hello! 👋 Welcome to **INAxDeveloper** (Developed by Developer Paresh).\n\nI'm **INAx AI**, your technical & careers consultant. How can I help you today? You can explore our IT services, get instant cost estimates, book an online video meeting, or apply for our open job vacancies!",
+    welcomeMessage: userConfig.welcomeMessage || "Hello! 👋 Welcome to **INAxDeveloper** (Developed by Developer Paresh).\n\nI'm **INAx AI**, your technical & careers consultant. How can I help you today? You can explore our IT services, get instant cost estimates, book an online video meeting, or apply for open vacancies.\n\n📎 *You can also attach resumes, RFPs, or project documents directly in this chat!*",
     quickPrompts: [
       { label: "💼 IT Services", query: "What services does INAxDeveloper offer?" },
       { label: "💰 Cost Estimate", query: "How much does it cost to build a custom web or mobile app?" },
@@ -78,6 +82,16 @@
       experience: "2+ Years"
     }
   ];
+
+  // Helper to convert file to Base64
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
 
   // Sound generator
   function playNotificationSound() {
@@ -183,9 +197,9 @@
       position: fixed;
       bottom: 96px;
       right: 24px;
-      width: 400px;
+      width: 410px;
       max-width: calc(100vw - 32px);
-      height: 640px;
+      height: 650px;
       max-height: calc(100vh - 120px);
       background: #ffffff;
       border-radius: 20px;
@@ -209,7 +223,7 @@
     .chat-header {
       background: linear-gradient(135deg, ${activeConfig.primaryColor}, ${activeConfig.secondaryColor});
       color: #ffffff;
-      padding: 16px 20px;
+      padding: 15px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -245,13 +259,13 @@
       border: 2px solid #ffffff;
     }
     .header-text h3 {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 15.5px;
+      font-weight: 700;
       letter-spacing: -0.2px;
     }
     .header-text p {
-      font-size: 12px;
-      opacity: 0.85;
+      font-size: 11.5px;
+      opacity: 0.88;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -283,7 +297,6 @@
       fill: currentColor;
     }
 
-    /* Top Action Bar (Quote, Book Meeting, Careers, WhatsApp) */
     .cta-bar {
       background: #f8fafc;
       padding: 7px 12px;
@@ -382,6 +395,25 @@
       border-top-right-radius: 4px;
     }
 
+    .file-attachment-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.06);
+      padding: 7px 10px;
+      border-radius: 8px;
+      margin-top: 6px;
+      font-size: 12px;
+    }
+    .msg-group.user .file-attachment-card {
+      background: rgba(255,255,255,0.2);
+    }
+    .file-attachment-card a {
+      color: inherit;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
     .msg-time {
       font-size: 10px;
       color: #94a3b8;
@@ -431,7 +463,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      max-height: 100px;
+      max-height: 95px;
       overflow-y: auto;
     }
     .quick-chip {
@@ -453,23 +485,75 @@
       transform: translateY(-1px);
     }
 
+    /* Attachment Preview Bar above footer */
+    .attachment-preview-bar {
+      display: none;
+      padding: 6px 14px;
+      background: #eff6ff;
+      border-top: 1px solid #dbeafe;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #1e40af;
+    }
+    .attachment-preview-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .attachment-remove-btn {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 0 4px;
+    }
+
+    /* Footer */
     .chat-footer {
-      padding: 12px 14px;
+      padding: 10px 14px;
       background: #ffffff;
       border-top: 1px solid #e2e8f0;
       display: flex;
       align-items: center;
       gap: 8px;
     }
+    .attach-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .attach-btn:hover {
+      background: #e2e8f0;
+      color: var(--primary);
+    }
+    .attach-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
     .chat-input {
       flex: 1;
       border: 1px solid #cbd5e1;
       border-radius: 24px;
-      padding: 10px 16px;
+      padding: 9px 15px;
       font-size: 13.5px;
       outline: none;
-      transition: border-color 0.2s;
       background: #f8fafc;
+      transition: border-color 0.2s;
     }
     .chat-input:focus {
       border-color: ${activeConfig.primaryColor};
@@ -477,8 +561,8 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
     .send-btn {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: ${activeConfig.primaryColor};
       color: #ffffff;
@@ -494,12 +578,12 @@
       transform: scale(1.05);
     }
     .send-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       fill: currentColor;
     }
 
-    /* Modal Layers */
+    /* Modals */
     .app-modal {
       position: absolute;
       top: 0;
@@ -522,10 +606,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .modal-header h4 {
-      font-size: 17px;
+      font-size: 16.5px;
       color: #0f172a;
       font-weight: 700;
     }
@@ -576,6 +660,31 @@
       resize: none;
       height: 55px;
     }
+
+    .upload-zone {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-zone:hover {
+      border-color: ${activeConfig.primaryColor};
+      background: #eff6ff;
+    }
+    .upload-zone p {
+      font-size: 12px;
+      color: #64748b;
+      margin: 0;
+    }
+    .upload-zone .uploaded-file-name {
+      font-weight: 600;
+      color: #059669;
+      margin-top: 4px;
+    }
+
     .submit-btn {
       width: 100%;
       background: ${activeConfig.primaryColor};
@@ -604,7 +713,6 @@
       display: none;
     }
 
-    /* Job Card inside Chatbot */
     .job-list-container {
       display: flex;
       flex-direction: column;
@@ -724,9 +832,22 @@
       <!-- Dynamic Prompt Chips -->
       <div class="quick-chips-wrapper" id="quickChips"></div>
 
+      <!-- Attachment Preview Bar -->
+      <div class="attachment-preview-bar" id="attachmentPreviewBar">
+        <div class="attachment-preview-info">
+          <span>📎</span>
+          <span id="attachedFileName">document.pdf</span>
+        </div>
+        <button class="attachment-remove-btn" id="removeAttachmentBtn" title="Remove attachment">&times;</button>
+      </div>
+
       <!-- Input Footer -->
       <div class="chat-footer">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Ask about services, jobs, estimates..." />
+        <input type="file" id="chatFileInput" style="display:none;" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg" />
+        <button class="attach-btn" id="attachFileBtn" title="Attach Document / Resume / Scope" aria-label="Attach File">
+          <svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+        </button>
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question or attach document..." />
         <button class="send-btn" id="sendBtn" title="Send message" aria-label="Send">
           <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -738,7 +859,7 @@
           <h4>🚀 Project Quote Request</h4>
           <button class="close-modal-btn" data-close="quoteModal">&times;</button>
         </div>
-        <p class="modal-subtitle">Share your requirements and our tech lead will review them and send you an architectural blueprint and estimate.</p>
+        <p class="modal-subtitle">Share your requirements and attach any RFP, wireframe, or scope document for Developer Paresh and our team to review.</p>
         
         <form id="quoteForm">
           <div class="form-group">
@@ -776,6 +897,14 @@
             </select>
           </div>
           <div class="form-group">
+            <label>Attach Project Scope / RFP / Wireframe (Optional)</label>
+            <input type="file" id="quoteDocInput" style="display:none;" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg" />
+            <div class="upload-zone" id="quoteUploadZone">
+              <p>📄 Click to upload scope document (.PDF, .DOCX, images)</p>
+              <div class="uploaded-file-name" id="quoteFileName"></div>
+            </div>
+          </div>
+          <div class="form-group">
             <label>Project Details</label>
             <textarea class="form-textarea" id="leadMsg" placeholder="Briefly describe what you want to build..."></textarea>
           </div>
@@ -790,7 +919,7 @@
           <h4>📅 Book Online Consultation</h4>
           <button class="close-modal-btn" data-close="bookingModal">&times;</button>
         </div>
-        <p class="modal-subtitle">Pick a convenient time slot for a 1-on-1 Google Meet / Zoom consultation with our technical architect.</p>
+        <p class="modal-subtitle">Schedule a 1-on-1 Google Meet / Zoom discovery consultation with Developer Paresh and our lead architect.</p>
 
         <form id="bookingForm">
           <div class="form-group">
@@ -845,33 +974,29 @@
           <h4>🎯 Current Job Openings</h4>
           <button class="close-modal-btn" data-close="jobsModal">&times;</button>
         </div>
-        <p class="modal-subtitle">Join our high-performing engineering team! Select an open position below to apply directly.</p>
+        <p class="modal-subtitle">Join INAxDeveloper! Browse active engineering vacancies and apply with your resume.</p>
 
-        <div class="job-list-container" id="jobListContainer">
-          <!-- Populated dynamically -->
-        </div>
+        <div class="job-list-container" id="jobListContainer"></div>
 
         <div style="margin-top:14px; text-align:center;">
           <button class="cta-btn" id="btnGeneralApply" style="width:100%; justify-content:center; padding:9px;">
-            📄 Submit General / Open Application
+            📄 Submit General Application with Resume
           </button>
         </div>
       </div>
 
-      <!-- MODAL 4: Job Application Form -->
+      <!-- MODAL 4: Job Application Form with Resume Upload -->
       <div class="app-modal" id="applyModal">
         <div class="modal-header">
           <h4 id="applyModalTitle">🎯 Apply for Position</h4>
           <button class="close-modal-btn" data-close="applyModal">&times;</button>
         </div>
-        <p class="modal-subtitle">Submit your profile to our talent acquisition team. We typically review and respond within 24-48 hours.</p>
+        <p class="modal-subtitle">Submit your profile & resume to INAxDeveloper. We review and respond within 24-48 hours.</p>
 
         <form id="applyForm">
           <div class="form-group">
             <label>Position Applying For *</label>
-            <select class="form-select" id="applyJobSelect">
-              <!-- Populated dynamically -->
-            </select>
+            <select class="form-select" id="applyJobSelect"></select>
           </div>
           <div class="form-group">
             <label>Full Name *</label>
@@ -894,15 +1019,19 @@
             <input type="url" class="form-input" id="candidatePortfolio" required placeholder="https://linkedin.com/in/... or github.com/..." />
           </div>
           <div class="form-group">
-            <label>Resume / CV Link (Google Drive / Dropbox / PDF URL)</label>
-            <input type="url" class="form-input" id="candidateResume" placeholder="https://drive.google.com/file/d/..." />
+            <label>Upload Resume / CV (.PDF, .DOCX) *</label>
+            <input type="file" id="resumeFileInput" style="display:none;" accept=".pdf,.doc,.docx,.txt" />
+            <div class="upload-zone" id="resumeUploadZone">
+              <p>📄 Click to upload your resume (.PDF, .DOCX)</p>
+              <div class="uploaded-file-name" id="resumeFileName"></div>
+            </div>
           </div>
           <div class="form-group">
             <label>Key Tech Skills & Brief Cover Note</label>
-            <textarea class="form-textarea" id="candidateCover" placeholder="Tell us about the key tech stacks, frameworks, or projects you have built..."></textarea>
+            <textarea class="form-textarea" id="candidateCover" placeholder="Tell us about the key frameworks or projects you have built..."></textarea>
           </div>
-          <button type="submit" class="submit-btn" id="submitApplyBtn">Submit Job Application</button>
-          <div class="success-alert" id="applySuccessAlert">🎉 Application received! Our recruitment team will review your profile.</div>
+          <button type="submit" class="submit-btn" id="submitApplyBtn">Submit Job Application & Resume</button>
+          <div class="success-alert" id="applySuccessAlert">🎉 Application & resume received! Our recruitment team will review your profile.</div>
         </form>
       </div>
 
@@ -923,13 +1052,100 @@
   const sendBtn = shadow.getElementById('sendBtn');
   const soundToggleBtn = shadow.getElementById('soundToggleBtn');
 
+  // File Attachment references
+  const attachFileBtn = shadow.getElementById('attachFileBtn');
+  const chatFileInput = shadow.getElementById('chatFileInput');
+  const attachmentPreviewBar = shadow.getElementById('attachmentPreviewBar');
+  const attachedFileNameEl = shadow.getElementById('attachedFileName');
+  const removeAttachmentBtn = shadow.getElementById('removeAttachmentBtn');
+
+  let currentChatAttachment = null;
+
+  // File Attachment Handlers
+  attachFileBtn.addEventListener('click', () => chatFileInput.click());
+
+  chatFileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 15 * 1024 * 1024) {
+      alert('File size exceeds 15MB limit. Please attach a smaller document.');
+      return;
+    }
+
+    try {
+      const base64Data = await fileToBase64(file);
+      currentChatAttachment = {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: (file.size / 1024).toFixed(1) + ' KB',
+        base64Data: base64Data,
+        fileUrl: base64Data // Fallback for standalone/GitHub Pages
+      };
+
+      attachedFileNameEl.textContent = `${file.name} (${currentChatAttachment.fileSize})`;
+      attachmentPreviewBar.style.display = 'flex';
+    } catch (err) {
+      alert('Could not read file.');
+    }
+  });
+
+  removeAttachmentBtn.addEventListener('click', () => {
+    currentChatAttachment = null;
+    chatFileInput.value = '';
+    attachmentPreviewBar.style.display = 'none';
+  });
+
+  // Quote File Upload zone
+  const quoteDocInput = shadow.getElementById('quoteDocInput');
+  const quoteUploadZone = shadow.getElementById('quoteUploadZone');
+  const quoteFileName = shadow.getElementById('quoteFileName');
+  let currentQuoteDoc = null;
+
+  quoteUploadZone.addEventListener('click', () => quoteDocInput.click());
+  quoteDocInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const base64Data = await fileToBase64(file);
+      currentQuoteDoc = {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: (file.size / 1024).toFixed(1) + ' KB',
+        base64Data: base64Data,
+        fileUrl: base64Data
+      };
+      quoteFileName.textContent = `✓ Selected: ${file.name} (${currentQuoteDoc.fileSize})`;
+    }
+  });
+
+  // Resume Upload zone
+  const resumeFileInput = shadow.getElementById('resumeFileInput');
+  const resumeUploadZone = shadow.getElementById('resumeUploadZone');
+  const resumeFileName = shadow.getElementById('resumeFileName');
+  let currentResumeFile = null;
+
+  resumeUploadZone.addEventListener('click', () => resumeFileInput.click());
+  resumeFileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const base64Data = await fileToBase64(file);
+      currentResumeFile = {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: (file.size / 1024).toFixed(1) + ' KB',
+        base64Data: base64Data,
+        fileUrl: base64Data
+      };
+      resumeFileName.textContent = `✓ Selected: ${file.name} (${currentResumeFile.fileSize})`;
+    }
+  });
+
   // Modals
   const quoteModal = shadow.getElementById('quoteModal');
   const bookingModal = shadow.getElementById('bookingModal');
   const jobsModal = shadow.getElementById('jobsModal');
   const applyModal = shadow.getElementById('applyModal');
 
-  // Buttons for modals
   shadow.getElementById('btnOpenQuote').addEventListener('click', () => openModal(quoteModal));
   shadow.getElementById('btnOpenBooking').addEventListener('click', () => openModal(bookingModal));
   shadow.getElementById('btnOpenJobs').addEventListener('click', () => { renderJobsList(); openModal(jobsModal); });
@@ -938,7 +1154,6 @@
     openApplyModal('General IT Application');
   });
 
-  // Close buttons
   shadow.querySelectorAll('.close-modal-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-close');
@@ -960,7 +1175,6 @@
     const select = shadow.getElementById('applyJobSelect');
     select.innerHTML = '';
     
-    // Add current active jobs
     activeJobs.forEach(j => {
       const opt = document.createElement('option');
       opt.value = j.title;
@@ -981,7 +1195,6 @@
     openModal(applyModal);
   }
 
-  // Populate Jobs list in modal
   function renderJobsList() {
     const container = shadow.getElementById('jobListContainer');
     container.innerHTML = '';
@@ -1001,7 +1214,7 @@
           <span>⏳ ${escapeHtml(job.experience || '2+ Yrs')}</span>
         </div>
         <div class="job-card-actions">
-          <button class="job-apply-mini-btn" data-job="${escapeHtml(job.title)}">Apply Now</button>
+          <button class="job-apply-mini-btn" data-job="${escapeHtml(job.title)}">Apply & Upload Resume</button>
         </div>
       `;
       card.querySelector('.job-apply-mini-btn').addEventListener('click', () => {
@@ -1040,7 +1253,6 @@
     soundToggleBtn.style.opacity = isSoundEnabled ? '1' : '0.4';
   });
 
-  // Quick Chips
   function renderQuickChips() {
     quickChips.innerHTML = '';
     activeConfig.quickPrompts.forEach(p => {
@@ -1067,13 +1279,26 @@
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  function addMessage(sender, text) {
+  function addMessage(sender, text, attachment) {
     const group = document.createElement('div');
     group.className = `msg-group ${sender}`;
 
     const bubble = document.createElement('div');
     bubble.className = 'msg-bubble';
     bubble.innerHTML = formatMarkdown(text);
+
+    if (attachment) {
+      const fileCard = document.createElement('div');
+      fileCard.className = 'file-attachment-card';
+      fileCard.innerHTML = `
+        <span>📄</span>
+        <div>
+          <a href="${attachment.fileUrl || '#'}" download="${escapeHtml(attachment.fileName)}" target="_blank">${escapeHtml(attachment.fileName)}</a>
+          <div style="font-size:10px; opacity:0.8;">${escapeHtml(attachment.fileSize || '')}</div>
+        </div>
+      `;
+      bubble.appendChild(fileCard);
+    }
 
     const time = document.createElement('div');
     time.className = 'msg-time';
@@ -1107,31 +1332,58 @@
 
   async function handleUserSend(text) {
     const msg = (text || chatInput.value).trim();
-    if (!msg) return;
+    const attachment = currentChatAttachment;
+
+    if (!msg && !attachment) return;
 
     chatInput.value = '';
-    addMessage('user', msg);
-    chatHistory.push({ role: 'user', text: msg });
+    currentChatAttachment = null;
+    chatFileInput.value = '';
+    attachmentPreviewBar.style.display = 'none';
+
+    addMessage('user', msg || 'Sent a document', attachment);
+    chatHistory.push({ role: 'user', text: msg || `[Attached file: ${attachment.fileName}]` });
 
     showTyping();
 
-    // Check if jobs requested
+    if (attachment) {
+      // Try uploading to backend /api/upload
+      try {
+        const upRes = await fetch(`${activeConfig.apiEndpoint}/api/upload`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(attachment)
+        });
+        if (upRes.ok) {
+          const upData = await upRes.json();
+          attachment.fileUrl = upData.fileUrl;
+        }
+      } catch (e) {}
+
+      setTimeout(() => {
+        hideTyping();
+        const reply = `Thank you for sharing **${attachment.fileName}**! 📄\n\nI have attached this document to your chat session. Our engineering and recruitment team at **${activeConfig.companyName}** will review it carefully.\n\n• Click **'📋 Request Quote'** to attach project specs\n• Click **'🎯 Careers & Jobs'** to apply for open developer positions`;
+        addMessage('bot', reply);
+        chatHistory.push({ role: 'bot', text: reply });
+      }, 700);
+      return;
+    }
+
     if (/\b(job|jobs|career|careers|hiring|vacancy|vacancies|apply|work with you|resume|intern)\b/i.test(msg)) {
       setTimeout(() => {
         hideTyping();
         let jobList = activeJobs.map((j, i) => `${i+1}. **${j.title}** (${j.type})\n   • Exp: ${j.experience} | Dept: ${j.department}`).join('\n\n');
-        const reply = `🎯 **We have active career opportunities!**\n\n${jobList}\n\n👉 Click **'🎯 Careers & Jobs'** in the top bar to apply or review details!`;
+        const reply = `🎯 **We have active career opportunities at INAxDeveloper!**\n\n${jobList}\n\n👉 Click **'🎯 Careers & Jobs'** in the top bar to apply and **upload your resume (.PDF/.DOCX)**!`;
         addMessage('bot', reply);
         chatHistory.push({ role: 'bot', text: reply });
       }, 600);
       return;
     }
 
-    // Check if booking requested
     if (/\b(book|booking|meeting|schedule|call|appointment|demo)\b/i.test(msg)) {
       setTimeout(() => {
         hideTyping();
-        const reply = "You can schedule a 1-on-1 online video consultation with our Solutions Architect!\n\n👉 Click **'📅 Book Meeting'** at the top bar to choose your preferred date, time slot, and discussion topic.";
+        const reply = "You can schedule a 1-on-1 online video consultation with Developer Paresh!\n\n👉 Click **'📅 Book Meeting'** at the top bar to choose your preferred date, time slot, and discussion topic.";
         addMessage('bot', reply);
         chatHistory.push({ role: 'bot', text: reply });
       }, 600);
@@ -1154,7 +1406,7 @@
     } catch (err) {
       setTimeout(() => {
         hideTyping();
-        const reply = `Thank you for contacting **${activeConfig.companyName}**! We specialize in custom software engineering, mobile apps, and AI solutions.\n\n• Click **'📋 Request Quote'** for estimates\n• Click **'📅 Book Meeting'** to schedule an online consultation\n• Click **'🎯 Careers & Jobs'** to explore open positions`;
+        const reply = `Thank you for contacting **${activeConfig.companyName}**! We specialize in custom software engineering, mobile apps, and AI solutions.\n\n• Click **'📋 Request Quote'** for estimates\n• Click **'📅 Book Meeting'** to schedule an online video consultation\n• Click **'🎯 Careers & Jobs'** to explore open positions & upload resumes`;
         addMessage('bot', reply);
         chatHistory.push({ role: 'bot', text: reply });
       }, 500);
@@ -1169,12 +1421,28 @@
     }
   });
 
-  // Handle Quote Form Submission
+  // Handle Quote Form Submission (with document)
   shadow.getElementById('quoteForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = shadow.getElementById('submitQuoteBtn');
     btn.disabled = true;
-    btn.textContent = 'Submitting...';
+    btn.textContent = 'Submitting Request & Document...';
+
+    // Upload attachment if any
+    let attachmentObj = currentQuoteDoc;
+    if (attachmentObj) {
+      try {
+        const upRes = await fetch(`${activeConfig.apiEndpoint}/api/upload`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(attachmentObj)
+        });
+        if (upRes.ok) {
+          const upData = await upRes.json();
+          attachmentObj.fileUrl = upData.fileUrl;
+        }
+      } catch (err) {}
+    }
 
     const leadData = {
       name: shadow.getElementById('leadName').value,
@@ -1182,7 +1450,8 @@
       phone: shadow.getElementById('leadPhone').value,
       service: shadow.getElementById('leadService').value,
       budget: shadow.getElementById('leadBudget').value,
-      message: shadow.getElementById('leadMsg').value
+      message: shadow.getElementById('leadMsg').value,
+      attachment: attachmentObj
     };
 
     try {
@@ -1206,7 +1475,9 @@
       shadow.getElementById('quoteSuccessAlert').style.display = 'none';
       btn.textContent = 'Submit Quote Request';
       shadow.getElementById('quoteForm').reset();
-      addMessage('bot', `Thank you **${leadData.name}**! 🎉 Your request for **${leadData.service}** has been received. Our senior architect will review it and reach out shortly.`);
+      quoteFileName.textContent = '';
+      currentQuoteDoc = null;
+      addMessage('bot', `Thank you **${leadData.name}**! 🎉 Your request for **${leadData.service}** has been received${leadData.attachment ? ` along with your document **${leadData.attachment.fileName}**` : ''}. Developer Paresh and our senior architect will review it and reach out shortly.`);
     }, 1800);
   });
 
@@ -1252,12 +1523,28 @@
     }, 1800);
   });
 
-  // Handle Job Application Submission
+  // Handle Job Application Submission (with Resume Upload)
   shadow.getElementById('applyForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = shadow.getElementById('submitApplyBtn');
     btn.disabled = true;
-    btn.textContent = 'Submitting Profile...';
+    btn.textContent = 'Uploading Resume & Profile...';
+
+    // Upload resume file if provided
+    let resumeFileObj = currentResumeFile;
+    if (resumeFileObj) {
+      try {
+        const upRes = await fetch(`${activeConfig.apiEndpoint}/api/upload`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(resumeFileObj)
+        });
+        if (upRes.ok) {
+          const upData = await upRes.json();
+          resumeFileObj.fileUrl = upData.fileUrl;
+        }
+      } catch (err) {}
+    }
 
     const appData = {
       jobTitle: shadow.getElementById('applyJobSelect').value,
@@ -1266,7 +1553,7 @@
       phone: shadow.getElementById('candidatePhone').value,
       experience: shadow.getElementById('candidateExp').value,
       portfolio: shadow.getElementById('candidatePortfolio').value,
-      resumeLink: shadow.getElementById('candidateResume').value,
+      resumeFile: resumeFileObj,
       coverNote: shadow.getElementById('candidateCover').value
     };
 
@@ -1289,9 +1576,11 @@
     setTimeout(() => {
       closeModal(applyModal);
       shadow.getElementById('applySuccessAlert').style.display = 'none';
-      btn.textContent = 'Submit Job Application';
+      btn.textContent = 'Submit Job Application & Resume';
       shadow.getElementById('applyForm').reset();
-      addMessage('bot', `Thank you **${appData.name}**! 🚀 Your application for **${appData.jobTitle}** has been received. Our HR & recruitment team will evaluate your profile and contact you.`);
+      resumeFileName.textContent = '';
+      currentResumeFile = null;
+      addMessage('bot', `Thank you **${appData.name}**! 🚀 Your application for **${appData.jobTitle}**${appData.resumeFile ? ` and resume (**${appData.resumeFile.fileName}**)` : ''} has been received. Our HR & recruitment team will evaluate your profile and contact you.`);
     }, 1800);
   });
 
@@ -1309,7 +1598,6 @@
         if (cfgRes.ok) cfg = await cfgRes.json();
       } catch (e) {}
 
-      // Fallback for GitHub Pages static hosting
       if (!cfg) {
         try {
           const staticCfgRes = await fetch('config.json');
@@ -1328,10 +1616,6 @@
           activeConfig.quickPrompts = cfg.quickActions;
           renderQuickChips();
         }
-        if (cfg.faq && Array.isArray(cfg.faq)) {
-          // Merge custom admin FAQs
-          activeConfig.faq = cfg.faq;
-        }
       }
 
       let jobsData = null;
@@ -1340,7 +1624,6 @@
         if (jobsRes.ok) jobsData = await jobsRes.json();
       } catch (e) {}
 
-      // Fallback for GitHub Pages static hosting
       if (!jobsData) {
         try {
           const staticJobsRes = await fetch('jobs.json');
@@ -1354,12 +1637,9 @@
       if (jobsData && jobsData.jobs && Array.isArray(jobsData.jobs)) {
         activeJobs = jobsData.jobs.filter(j => j.status === 'Active');
       }
-    } catch (err) {
-      // Offline fallback
-    }
+    } catch (err) {}
   }
 
-  // Set default booking date to tomorrow
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const dateInput = shadow.getElementById('bookDate');
@@ -1368,7 +1648,6 @@
     dateInput.min = new Date().toISOString().split('T')[0];
   }
 
-  // Welcome message & init
   addMessage('bot', activeConfig.welcomeMessage);
   renderQuickChips();
   loadBackendData();

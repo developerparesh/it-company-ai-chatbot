@@ -7,8 +7,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.static(path.join(__dirname)));
+
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+app.use('/uploads', express.static(UPLOADS_DIR));
 
 const CONFIG_PATH = path.join(__dirname, 'config.json');
 const LEADS_PATH = path.join(__dirname, 'leads.json');
@@ -38,6 +45,37 @@ function writeJSON(filePath, data) {
   }
 }
 
+// ==================== FILE UPLOAD API ====================
+app.post('/api/upload', (req, res) => {
+  try {
+    const { fileName, fileType, base64Data } = req.body;
+    if (!fileName || !base64Data) {
+      return res.status(400).json({ success: false, error: 'File name and file data are required.' });
+    }
+
+    const cleanBase64 = base64Data.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+    const buffer = Buffer.from(cleanBase64, 'base64');
+
+    const safeName = Date.now() + '_' + fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const destPath = path.join(UPLOADS_DIR, safeName);
+
+    fs.writeFileSync(destPath, buffer);
+
+    const fileUrl = `/uploads/${safeName}`;
+    console.log(`[FILE UPLOADED] 📄 ${fileName} saved to ${fileUrl} (${(buffer.length / 1024).toFixed(1)} KB)`);
+
+    res.json({
+      success: true,
+      fileUrl,
+      fileName,
+      fileSize: (buffer.length / 1024).toFixed(1) + ' KB'
+    });
+  } catch (err) {
+    console.error('File upload error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // ==================== CONFIG APIS ====================
 app.get('/api/config', (req, res) => {
   const config = readJSON(CONFIG_PATH, {});
@@ -61,7 +99,7 @@ app.get('/api/leads', (req, res) => {
 });
 
 app.post('/api/leads', (req, res) => {
-  const { name, email, phone, company, service, budget, message } = req.body;
+  const { name, email, phone, company, service, budget, message, attachment } = req.body;
   if (!name || (!email && !phone)) {
     return res.status(400).json({ success: false, error: 'Name and either Email or Phone are required.' });
   }
@@ -76,13 +114,14 @@ app.post('/api/leads', (req, res) => {
     service: service || 'General IT Inquiry',
     budget: budget || 'Not specified',
     message: message ? message.trim() : '',
+    attachment: attachment || null,
     createdAt: new Date().toISOString()
   };
 
   leads.unshift(newLead);
   writeJSON(LEADS_PATH, leads);
 
-  console.log(`[NEW CLIENT LEAD] 🚀 ${newLead.name} (${newLead.email || newLead.phone}) - Service: ${newLead.service}`);
+  console.log(`[NEW CLIENT LEAD] 🚀 ${newLead.name} (${newLead.email || newLead.phone}) - Service: ${newLead.service}${newLead.attachment ? ` [Attached: ${newLead.attachment.fileName}]` : ''}`);
 
   res.json({
     success: true,
@@ -118,7 +157,6 @@ app.post('/api/jobs', (req, res) => {
 
   let jobs = readJSON(JOBS_PATH, []);
   if (id) {
-    // Edit existing job
     const index = jobs.findIndex(j => j.id === id);
     if (index !== -1) {
       jobs[index] = {
@@ -138,7 +176,6 @@ app.post('/api/jobs', (req, res) => {
     }
   }
 
-  // Create new job
   const newJob = {
     id: 'job_' + Date.now(),
     title: title.trim(),
@@ -155,7 +192,7 @@ app.post('/api/jobs', (req, res) => {
   jobs.unshift(newJob);
   writeJSON(JOBS_PATH, jobs);
 
-  console.log(`[NEW JOB POSTED BY ADMIN] 💼 ${newJob.title} (${newJob.type})`);
+  console.log(`[NEW JOB POSTED] 💼 ${newJob.title} (${newJob.type})`);
   res.json({ success: true, job: newJob, message: 'New job vacancy posted successfully!' });
 });
 
@@ -179,7 +216,7 @@ app.get('/api/applications', (req, res) => {
 });
 
 app.post('/api/apply', (req, res) => {
-  const { name, email, phone, jobTitle, experience, portfolio, resumeLink, coverNote } = req.body;
+  const { name, email, phone, jobTitle, experience, portfolio, resumeLink, resumeFile, coverNote } = req.body;
   if (!name || (!email && !phone)) {
     return res.status(400).json({ success: false, error: 'Name and either Email or Phone are required.' });
   }
@@ -194,6 +231,7 @@ app.post('/api/apply', (req, res) => {
     experience: experience || 'Not specified',
     portfolio: portfolio ? portfolio.trim() : '',
     resumeLink: resumeLink ? resumeLink.trim() : '',
+    resumeFile: resumeFile || null,
     coverNote: coverNote ? coverNote.trim() : '',
     status: 'New',
     createdAt: new Date().toISOString()
@@ -202,7 +240,7 @@ app.post('/api/apply', (req, res) => {
   applications.unshift(newApp);
   writeJSON(APPLICATIONS_PATH, applications);
 
-  console.log(`[NEW JOB APPLICATION] 🎯 ${newApp.name} applied for: ${newApp.jobTitle} (${newApp.email || newApp.phone})`);
+  console.log(`[NEW JOB APPLICATION] 🎯 ${newApp.name} applied for: ${newApp.jobTitle}${newApp.resumeFile ? ` [Resume: ${newApp.resumeFile.fileName}]` : ''}`);
 
   res.json({
     success: true,
@@ -268,7 +306,7 @@ app.post('/api/meetings', (req, res) => {
   meetings.unshift(newMeeting);
   writeJSON(MEETINGS_PATH, meetings);
 
-  console.log(`[NEW ONLINE MEETING BOOKED] 📅 ${newMeeting.name} (${newMeeting.email}) for: ${newMeeting.meetingType} on ${newMeeting.preferredDate} at ${newMeeting.preferredTime}`);
+  console.log(`[ONLINE MEETING BOOKED] 📅 ${newMeeting.name} (${newMeeting.email}) for ${newMeeting.meetingType}`);
 
   res.json({
     success: true,
@@ -290,33 +328,33 @@ app.delete('/api/meetings/:id', (req, res) => {
   }
 });
 
-// ==================== CHAT APIS (SMART RULES + GEMINI) ====================
-function resolveRuleBasedAnswer(userMsg, config) {
-  const clean = userMsg.toLowerCase().trim();
+// ==================== CHAT APIS (WITH DOCUMENT SUPPORT) ====================
+function resolveRuleBasedAnswer(userMsg, config, attachment) {
+  const clean = userMsg ? userMsg.toLowerCase().trim() : '';
 
-  // Check greetings
-  if (/^(hi|hello|hey|namaste|good morning|good afternoon|good evening|greetings)\b/i.test(clean)) {
-    return `Hello! 👋 Welcome to **${config.company.name}**. I'm **${config.company.botName}**, your IT solutions & careers consultant.\n\nHow can I help you today?\n• 💼 Browse **IT Services**\n• 💰 Get an instant **Cost Estimate**\n• 📅 **Book an Online Meeting** with our architect\n• 🎯 Browse **Open Jobs & Apply**\n• 👨‍💻 Hire **Dedicated Developers**`;
+  if (attachment) {
+    return `Thank you for sending the document **${attachment.fileName}** (${attachment.fileSize || 'Uploaded'})! 📄\n\nI have attached this document to your chat session. Our engineering and recruitment team at **${config.company.name}** will review it carefully.\n\nCould you also share your **Name and Email/Phone** or click **'📋 Request Quote'** or **'🎯 Apply for Jobs'** so we can associate your document with your profile?`;
   }
 
-  // Check jobs / careers keywords
+  if (/^(hi|hello|hey|namaste|good morning|good afternoon|good evening|greetings)\b/i.test(clean)) {
+    return `Hello! 👋 Welcome to **${config.company.name}** (Developed by **Developer Paresh**).\n\nHow can I help you today?\n• 💼 Browse **IT Services**\n• 💰 Get an instant **Cost Estimate**\n• 📅 **Book an Online Meeting** with Developer Paresh\n• 🎯 Browse **Open Jobs & Apply**\n• 📎 You can also **attach resumes, RFPs, or project docs** using the paperclip button!`;
+  }
+
   if (/\b(job|jobs|hiring|career|careers|vacancy|vacancies|apply|work with you|resume|intern|opening|openings)\b/i.test(clean)) {
     const jobs = readJSON(JOBS_PATH, []);
     const activeJobs = jobs.filter(j => j.status === 'Active');
     if (activeJobs.length > 0) {
       let jobList = activeJobs.map((j, i) => `${i+1}. **${j.title}** (${j.type})\n   • Experience: ${j.experience} | Dept: ${j.department}`).join('\n\n');
-      return `🚀 **We are currently hiring for ${activeJobs.length} open position(s):**\n\n${jobList}\n\n👉 Click **'🎯 Apply for Jobs'** in the top bar to submit your application in 30 seconds!`;
+      return `🚀 **We are currently hiring for ${activeJobs.length} open position(s) at INAxDeveloper:**\n\n${jobList}\n\n👉 Click **'🎯 Apply for Jobs'** in the top bar to submit your profile and **upload your resume (.PDF/.DOCX)**!`;
     } else {
-      return `We are always looking for great engineers, designers, and project managers! Click **'🎯 Apply for Jobs'** to submit an open application with your resume link and skills.`;
+      return `We are always looking for great engineers, designers, and project managers! Click **'🎯 Apply for Jobs'** to upload your resume (.PDF/.DOCX) directly.`;
     }
   }
 
-  // Check meeting / booking keywords
   if (/\b(book|booking|meeting|schedule|call|appointment|demo|google meet|zoom)\b/i.test(clean)) {
-    return `You can easily book a 1-on-1 online video consultation with our Solutions Architect!\n\n👉 Click **'📅 Book Meeting'** at the top bar to select your preferred date, time slot, and discussion topic.`;
+    return `You can easily book a 1-on-1 online video consultation with Developer Paresh and the INAxDeveloper team!\n\n👉 Click **'📅 Book Meeting'** at the top bar to select your preferred date, time slot, and discussion topic.`;
   }
 
-  // Check matching FAQ items
   if (config.faq && Array.isArray(config.faq)) {
     for (const item of config.faq) {
       if (item.keywords && item.keywords.some(kw => clean.includes(kw.toLowerCase()))) {
@@ -325,39 +363,37 @@ function resolveRuleBasedAnswer(userMsg, config) {
     }
   }
 
-  // Check specific service match
   if (config.services && Array.isArray(config.services)) {
     for (const s of config.services) {
       const matchTitle = clean.includes(s.title.toLowerCase()) || clean.includes(s.id.toLowerCase());
       const matchTech = s.technologies && s.technologies.some(t => clean.includes(t.toLowerCase()));
       if (matchTitle || matchTech) {
-        return `**${s.title}**\n\n${s.description}\n\n🛠 **Key Tech Stack:** ${s.technologies.join(', ')}\n\nWould you like a custom estimate or portfolio examples for this service? Click **'📋 Request Quote'** or **'📅 Book Meeting'** to connect with our lead architect!`;
+        return `**${s.title}**\n\n${s.description}\n\n🛠 **Key Tech Stack:** ${s.technologies.join(', ')}\n\nWould you like a custom estimate? Click **'📋 Request Quote'** or **'📅 Book Meeting'** to connect with our team!`;
       }
     }
   }
 
-  // Default response
-  return `Thank you for asking! At **${config.company.name}**, we provide custom software development, mobile apps (iOS/Android), AI/ML integration, and dedicated IT staffing.\n\nCould you tell me a little more about your requirements? Or choose from:\n• **'📋 Request Quote'** for project estimates\n• **'📅 Book Meeting'** to schedule an online video consultation\n• **'🎯 Apply for Jobs'** to explore our career vacancies`;
+  return `Thank you for contacting **${config.company.name}**! We provide custom software engineering, mobile apps, AI solutions, and dedicated IT staffing.\n\n• **'📋 Request Quote'** to get an estimate & attach project docs\n• **'📅 Book Meeting'** to schedule an online video consultation\n• **'🎯 Apply for Jobs'** to view career vacancies & upload your resume`;
 }
 
 app.post('/api/chat', async (req, res) => {
-  const { message, history, apiKey } = req.body;
-  if (!message || typeof message !== 'string') {
-    return res.status(400).json({ error: 'Message is required' });
+  const { message, history, apiKey, attachment } = req.body;
+  if (!message && !attachment) {
+    return res.status(400).json({ error: 'Message or attachment is required' });
   }
 
   const config = readJSON(CONFIG_PATH, {});
   const effectiveApiKey = apiKey || process.env.GEMINI_API_KEY;
 
-  if (effectiveApiKey) {
+  if (effectiveApiKey && !attachment) {
     try {
       const jobs = readJSON(JOBS_PATH, []).filter(j => j.status === 'Active');
       const jobsSummary = jobs.map(j => `- ${j.title} (${j.type}, Exp: ${j.experience})`).join('\n');
 
       const systemInstruction = (config.geminiConfig?.systemInstruction || 
-        `You are Nova, an expert IT & Careers Consultant for ${config.company.name}.`) + 
-        `\n\nCurrent active job vacancies available for applicants:\n${jobsSummary || 'Open applications accepted.'}\n` +
-        `Direct users to click 'Request Quote', 'Book Meeting', or 'Apply for Jobs' where relevant.`;
+        `You are INAx AI, an expert IT & Careers Consultant for ${config.company.name} developed by Developer Paresh.`) + 
+        `\n\nCurrent active job vacancies available:\n${jobsSummary || 'Open applications accepted.'}\n` +
+        `Direct users to click 'Request Quote', 'Book Meeting', or 'Apply for Jobs' where relevant. Mention users can attach resumes or project specs via the paperclip button.`;
 
       const contents = [];
       if (Array.isArray(history)) {
@@ -387,7 +423,7 @@ app.post('/api/chat', async (req, res) => {
       });
 
       if (!response.ok) {
-        const fallbackText = resolveRuleBasedAnswer(message, config);
+        const fallbackText = resolveRuleBasedAnswer(message, config, attachment);
         return res.json({ reply: fallbackText, engine: 'rule-engine-fallback' });
       }
 
@@ -401,14 +437,13 @@ app.post('/api/chat', async (req, res) => {
     }
   }
 
-  // Rule-based engine fallback
-  const ruleReply = resolveRuleBasedAnswer(message, config);
+  const ruleReply = resolveRuleBasedAnswer(message, config, attachment);
   return res.json({ reply: ruleReply, engine: 'smart-rules' });
 });
 
 app.listen(PORT, () => {
   console.log(`=======================================================`);
-  console.log(`🤖 IT Company AI Live Chat Server running!`);
+  console.log(`🤖 INAxDeveloper AI Live Chat Server running!`);
   console.log(`🌐 Website Demo:       http://localhost:${PORT}`);
   console.log(`📊 Admin Portal:       http://localhost:${PORT}/admin.html`);
   console.log(`=======================================================`);
